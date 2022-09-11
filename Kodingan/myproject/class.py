@@ -15,6 +15,7 @@ class User(db.Model):
     username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     total_pembelian = db.Column(db.Integer, default=0)
+    is_admin = db.Column(db.Boolean,nullable=False,default=False)
 
 class Item(db.Model):
     item_id = db.Column(db.Integer, primary_key=True, index=True, nullable=False, unique=True)
@@ -23,8 +24,8 @@ class Item(db.Model):
     harga_item = db.Column(db.Integer, nullable=False)
     jumlah_item = db.Column(db.Integer, nullable=False)
     jumlah_terbeli = db.Column(db.Integer,default=0)
-    # kategori_id = db.Column(db.Integer, db.ForeignKey('kategori.kategori_id'))
-    # nama_kategori = db.relationship('Kategori',backref = "item")
+    kategori_id = db.Column(db.Integer, db.ForeignKey('kategori.kategori_id'))
+    nama_kategori = db.relationship('Kategori',backref = "item")
 
 class Kategori(db.Model):
     kategori_id = db.Column(db.Integer, primary_key=True, index=True, nullable=False, unique=True)
@@ -39,7 +40,6 @@ class Order(db.Model):
     order_date = db.Column(db.DateTime,nullable=False, default=datetime.now())
     jumlah_barang = db.Column(db.Integer)
     total_harga = db.Column(db.Integer)
-
 
 class Orderdetail(db.Model):
     order_detail_id = db.Column(db.Integer, primary_key=True, index=True, nullable=False, unique=True)
@@ -63,9 +63,11 @@ def BasicAuth() :
     pass_encode_2 = base64.b64encode(pass_encode)
     pass_cek = pass_encode_2.decode('utf-8')
 
-    user = User.query.filter_by(username=username_aja).filter_by(password=pass_cek).first()
+    user = User.query.filter_by(username=username_aja).filter_by(password=pass_cek).first_or_404()
     if user :
-        return str(user.user_id)
+        return [user.user_id,user.is_admin]
+    # else :
+    #     return [7]
     # return[username_aja,pass_cek]
 
 # Home
@@ -130,7 +132,7 @@ def user_update():
             "message" : "auth error"
         }
     else :
-        user = User.query.filter_by(user_id=auth).first()
+        user = User.query.filter_by(user_id=auth[0]).first()
 
         if 'nama_user' in data :
             user.nama_user = data['nama_user']
@@ -160,41 +162,54 @@ def user_update():
 # Item API
 @app.route('/item/add_item', methods=['POST'])
 def add_item():
-    data = request.get_json()
-    item = Item(
-        nama_item = data['nama_item'],
-        deskripsi = data['deskripsi'],
-        harga_item = data['harga_item'],
-        jumlah_item = data['jumlah_item']
-    )
-    try :
-        db.session.add(item)
-        db.session.commit()
-    except :
+    auth = BasicAuth()
+    if auth[1] != True :
         return {
-            "response" : "error"
-        },401
-    return {
-        "response" : "success"
-    },201
+            "response" : "auth error"
+        }
+    else :
+        data = request.get_json()
+        item = Item(
+            nama_item = data['nama_item'],
+            deskripsi = data['deskripsi'],
+            harga_item = data['harga_item'],
+            jumlah_item = data['jumlah_item'],
+            kategori_id = data['kategori_id']
+        )
+        try :
+            db.session.add(item)
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+            },401
+        return {
+            "response" : "success"
+        },201
 
 @app.route('/item/add_kategori', methods=['POST'])
 def add_kategori():
-    data = request.get_json()
-    kategori = Kategori(
-        nama_kategori = data['nama_kategori'],
-        deskripsi = data['deskripsi']
-    )
-    try :
-        db.session.add(kategori)
-        db.session.commit()
-    except :
+    auth = BasicAuth()
+    if auth[1] != True :
         return {
-            "response" : "error"
-        },401
-    return {
-        "response" : "success"
-    },201
+            "response" : "auth error"
+        }
+    else : 
+        data = request.get_json()
+        kategori = Kategori(
+            nama_kategori = data['nama_kategori'],
+            deskripsi = data['deskripsi']
+        )
+        try :
+            db.session.add(kategori)
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+            },401
+        return {
+            "response" : "success"
+        },201
 
 @app.route('/item/search_item', methods=['GET'])
 def search_item():
@@ -213,36 +228,42 @@ def search_item():
 
 @app.route('/item/update_item/<id>', methods=['PUT'])
 def item_update(id):
-    data = request.get_json()
-
-    if 'nama_item' not in data and 'deskripsi' not in data and 'harga_item' not in data and 'jumlah_item' not in data and 'jumlah_terbeli' not in data :
+    auth = BasicAuth()
+    if auth[1] != True :
         return {
-            "error" : "field tidak ada"
-        },400
+            "response" : "auth error"
+        }
+    else :
+        data = request.get_json()
 
-    item = Item.query.filter_by(item_id=id).first()
+        if 'nama_item' not in data and 'deskripsi' not in data and 'harga_item' not in data and 'jumlah_item' not in data and 'jumlah_terbeli' not in data :
+            return {
+                "error" : "field tidak ada"
+            },400
 
-    if 'nama_item' in data :
-        item.nama_item = data['nama_item']
+        item = Item.query.filter_by(item_id=id).first()
 
-    if 'deskripsi' in data :
-        item.deskripsi = data['deskripsi']
+        if 'nama_item' in data :
+            item.nama_item = data['nama_item']
 
-    if 'harga_item' in data :
-        item.harga_item = data['harga_item']
-    
-    if 'jumlah_item' in data :
-        item.jumlah_item = data['jumlah_item']
+        if 'deskripsi' in data :
+            item.deskripsi = data['deskripsi']
 
-    try :
-        db.session.commit()
-    except :
+        if 'harga_item' in data :
+            item.harga_item = data['harga_item']
+        
+        if 'jumlah_item' in data :
+            item.jumlah_item = data['jumlah_item']
+
+        try :
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+            },401
         return {
-            "response" : "error"
-        },401
-    return {
-        "response" : "success"
-    },201
+            "response" : "success"
+        },201
 
 
 # Order API
@@ -252,13 +273,14 @@ def add_order():
     if not auth :
         return jsonify("auth error")
     else :
+        # return {"yes" : auth[0]}
         data = request.get_json()
         # input_item = data['item_id']
         # input_user = data['user_id']
         # query_item = Item.query.filter_by(item_id=input_item).first()
-        query_user = User.query.filter_by(user_id=auth).first()
+        query_user = User.query.filter_by(user_id=auth[0]).first()
         order = Order(
-            user_id = auth,
+            user_id = auth[0],
             order_date = datetime.now()
         )
         db.session.add(order)
@@ -307,51 +329,36 @@ def add_order():
 
 @app.route('/order/check_order_pending/<id>', methods=['PUT'])
 def check_order_pending(id):
-    hitung = Order.query.filter_by(order_status = 'activate').count()
-    query_order = Order.query.filter_by(user_id=id).filter_by(order_status="pending").first()
-    query_user = User.query.filter(User.user_id==query_order.user_id).first()
-    
-    if not hitung < 10 :
-            return {
-            "message" : "antrian penuh"
-        }
-    elif query_order.order_status == "pending" :
-        query_order.order_status = "activate"
-        query_orderdetail = Orderdetail.query.filter(query_order.order_id == Orderdetail.order_id).all()
-        for i in query_orderdetail :
-            query_item = Item.query.filter(Item.item_id == i.item_id).first()
-            if query_item.jumlah_item < i.jumlah_subbarang :
-                db.session.delete(query_order)
-                db.session.commit()
-                return jsonify("pesanan lebih dari stok")
-                break
-            query_item.jumlah_item -= i.jumlah_subbarang
-            query_item.jumlah_terbeli += i.jumlah_subbarang
-            # db.session.commit()
-            
-  
-        query_user.total_pembelian += 1
-
-    try :
-        # db.session.add()
-        db.session.commit()
-    except :
+    auth = BasicAuth()
+    if auth[1] != True :
         return {
-            "response" : "error"
-        },401
-    return {
-        "response" : "success"
-    },201
-
-@app.route('/order/check_order_activate/<id>', methods=['PUT'])
-def check_order_activate(id):
-    # data = request.get_json()
-    # hitung = Order.query.filter_by(order_status = 'activate').count()
-    query_order = Order.query.filter_by(user_id=id).filter_by(order_status="activate").first()
-    query_user = User.query.filter(User.user_id==query_order.user_id).first()
-
-    if query_order.order_status == "activate" :
-        query_order.order_status = "completed"
+            "response" : "auth error"
+        }
+    else :
+        hitung = Order.query.filter_by(order_status = 'activate').count()
+        query_order = Order.query.filter_by(user_id=id).filter_by(order_status="pending").first()
+        query_user = User.query.filter(User.user_id==query_order.user_id).first()
+        
+        if not hitung < 10 :
+                return {
+                "message" : "antrian penuh"
+            }
+        elif query_order.order_status == "pending" :
+            query_order.order_status = "activate"
+            query_orderdetail = Orderdetail.query.filter(query_order.order_id == Orderdetail.order_id).all()
+            for i in query_orderdetail :
+                query_item = Item.query.filter(Item.item_id == i.item_id).first()
+                if query_item.jumlah_item < i.jumlah_subbarang :
+                    db.session.delete(query_order)
+                    db.session.commit()
+                    return jsonify("pesanan lebih dari stok")
+                    break
+                query_item.jumlah_item -= i.jumlah_subbarang
+                query_item.jumlah_terbeli += i.jumlah_subbarang
+                # db.session.commit()
+                
+    
+            query_user.total_pembelian += 1
 
         try :
             # db.session.add()
@@ -361,12 +368,39 @@ def check_order_activate(id):
                 "response" : "error"
             },401
         return {
-            "response" : "success",
-            "order_id" : query_order.order_id,
-            "user_id" : query_user.user_id,
-            "nama_user" : query_user.nama_user,
-            "order_status" : "completed"
+            "response" : "success"
         },201
+
+@app.route('/order/check_order_activate/<id>', methods=['PUT'])
+def check_order_activate(id):
+    auth = BasicAuth()
+    if auth[1] != True :
+        return {
+            "response" : "auth error"
+        }
+    else :
+        # data = request.get_json()
+        # hitung = Order.query.filter_by(order_status = 'activate').count()
+        query_order = Order.query.filter_by(user_id=id).filter_by(order_status="activate").first()
+        query_user = User.query.filter(User.user_id==query_order.user_id).first()
+
+        if query_order.order_status == "activate" :
+            query_order.order_status = "completed"
+
+            try :
+                # db.session.add()
+                db.session.commit()
+            except :
+                return {
+                    "response" : "error"
+                },401
+            return {
+                "response" : "success",
+                "order_id" : query_order.order_id,
+                "user_id" : query_user.user_id,
+                "nama_user" : query_user.nama_user,
+                "order_status" : "completed"
+            },201
 
 @app.route('/order/cancel_order', methods=['DELETE'])
 def cancel_order():
@@ -374,7 +408,7 @@ def cancel_order():
     if not auth :
         return jsonify ("auth error")
     else :
-        Order.query.filter(Order.order_status == "pending").filter_by(user_id=auth).delete()
+        Order.query.filter(Order.order_status == "pending").filter_by(user_id=auth[0]).delete()
     try :
         # order = Order.query.filter(Order.order_status == "pending").filter_by(user_id=id).delete()
         db.session.commit()
@@ -390,37 +424,49 @@ def cancel_order():
 # Reporting API
 @app.route('/reporting/top5_user', methods=['GET'])
 def top5_user():
-    # data = request.get_json()
-    top5_user = db.engine.execute('''SELECT * FROM "user" ORDER BY total_pembelian DESC LIMIT 5''')
-    try :
-        db.engine.execute('''SELECT * FROM "user" ORDER BY total_pembelian DESC LIMIT 5''')
-        db.session.commit()
-    except :
+    auth = BasicAuth()
+    if auth[1] != True :
         return {
-            "response" : "error"
-            },401
-    return jsonify([
-        {
-        'nama_user' : user.nama_user,
-        'email_user' : user.email_user,
-        'total_pembelian' : user.total_pembelian
-        } for user in top5_user
-    ]) 
+            "response" : "auth error"
+        }
+    else :
+        # data = request.get_json()
+        top5_user = db.engine.execute('''SELECT * FROM "user" ORDER BY total_pembelian DESC LIMIT 5''')
+        try :
+            db.engine.execute('''SELECT * FROM "user" ORDER BY total_pembelian DESC LIMIT 5''')
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+                },401
+        return jsonify([
+            {
+            'nama_user' : user.nama_user,
+            'email_user' : user.email_user,
+            'total_pembelian' : user.total_pembelian
+            } for user in top5_user
+        ]) 
 
 @app.route('/reporting/top5_item', methods=['GET'])
 def top5_item():
-    top5_item = db.engine.execute('''SELECT * FROM item ORDER BY jumlah_terbeli DESC LIMIT 5''')
-    try :
-        top5_item
-        db.session.commit()
-    except :
+    auth = BasicAuth()
+    if auth[1] != True :
         return {
-            "response" : "error"
-            },401
-    return jsonify([
-        {
-        'nama_item' : item.nama_item,
-        'harga_item' : item.harga_item,
-        'jumlah_terbeli' : item.jumlah_terbeli
-        } for item in top5_item
-    ]) 
+            "response" : "auth error"
+        }
+    else :
+        top5_item = db.engine.execute('''SELECT * FROM item ORDER BY jumlah_terbeli DESC LIMIT 5''')
+        try :
+            top5_item
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+                },401
+        return jsonify([
+            {
+            'nama_item' : item.nama_item,
+            'harga_item' : item.harga_item,
+            'jumlah_terbeli' : item.jumlah_terbeli
+            } for item in top5_item
+        ]) 
