@@ -1,5 +1,5 @@
 import base64
-import datetime
+from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
@@ -25,7 +25,6 @@ class Item(db.Model):
     jumlah_terbeli = db.Column(db.Integer,default=0)
     # kategori_id = db.Column(db.Integer, db.ForeignKey('kategori.kategori_id'))
     # nama_kategori = db.relationship('Kategori',backref = "item")
-    # nama_item_detail = db.relationship('Orderdetail', backref="item_detail")
 
 class Kategori(db.Model):
     kategori_id = db.Column(db.Integer, primary_key=True, index=True, nullable=False, unique=True)
@@ -34,18 +33,18 @@ class Kategori(db.Model):
 
 class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True, index=True, nullable=False, unique=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id',ondelete='CASCADE'))
     username = db.relationship('User',backref = "order")
     order_status = db.Column(db.String(50),nullable=False, default='pending')
-    order_date = db.Column(db.Date,nullable=False,default = datetime.datetime.now())
-    jumlah_barang = db.Column(db.Integer,nullable=False)
-    total_harga = db.Column(db.Integer,nullable=False)
+    order_date = db.Column(db.DateTime,nullable=False, default=datetime.now())
+    jumlah_barang = db.Column(db.Integer)
+    total_harga = db.Column(db.Integer)
 
 
 class Orderdetail(db.Model):
     order_detail_id = db.Column(db.Integer, primary_key=True, index=True, nullable=False, unique=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.order_id'))
-    item_id = db.Column(db.Integer, db.ForeignKey('item.item_id'))
+    order_id = db.Column(db.Integer, db.ForeignKey('order.order_id',ondelete='CASCADE'))
+    item_id = db.Column(db.Integer, db.ForeignKey('item.item_id',ondelete='CASCADE'))
     nama_item = db.Column(db.String(200))
     jumlah_subbarang = db.Column(db.Integer,nullable=False)
     subtotal_harga = db.Column(db.Integer,nullable=False)
@@ -94,7 +93,6 @@ def tes():
     # ]) 
 
 
-
 # User API
 @app.route('/register', methods=['POST'])
 def user_register():
@@ -118,7 +116,7 @@ def user_register():
         "response" : "success"
     },201
 
-@app.route('/user/update/', methods=['PUT'])
+@app.route('/user/update', methods=['PUT'])
 def user_update():
     auth = BasicAuth()
     data = request.get_json()
@@ -157,8 +155,6 @@ def user_update():
         return {
             "response" : "success"
         },201
-
-
 
 
 # Item API
@@ -248,19 +244,22 @@ def item_update(id):
         "response" : "success"
     },201
 
+
 # Order API
 @app.route('/order/add_order', methods=['POST'])
 def add_order():
-    data = request.get_json()
-    hitung = Order.query.filter_by(order_status = 'activate').count()
-    # input_item = data['item_id']
-    input_user = data['user_id']
-    # query_item = Item.query.filter_by(item_id=input_item).first()
-    query_user = User.query.filter_by(user_id=input_user).first()
-
-    if hitung < 10 :
+    auth = BasicAuth()
+    if not auth :
+        return jsonify("auth error")
+    else :
+        data = request.get_json()
+        # input_item = data['item_id']
+        # input_user = data['user_id']
+        # query_item = Item.query.filter_by(item_id=input_item).first()
+        query_user = User.query.filter_by(user_id=auth).first()
         order = Order(
-            user_id = data['user_id']
+            user_id = auth,
+            order_date = datetime.now()
         )
         db.session.add(order)
         db.session.commit()
@@ -269,79 +268,124 @@ def add_order():
         for i in query_orderid :
             arr.append(i.order_id)
 
-        query_namaitem = Item.query.filter_by(item_id = data['item_id']).first()
+        for i in range(len(data["orderan"])) :
+            query_item = Item.query.filter_by(nama_item = data['orderan'][i]).first()
+            orderdetail = Orderdetail(
+                order_id = max(arr),
+                item_id = query_item.item_id,
+                nama_item = data['orderan'][i],
+                jumlah_subbarang = data['jumlah_subbarang'][i],
+                subtotal_harga = data['jumlah_subbarang'][i] * query_item.harga_item
+            ) 
+            db.session.add(orderdetail)
+            db.session.commit()
 
-        orderdetail = Orderdetail(
-            order_id = max(arr),
-            item_id = data['item_id'],
-            nama_item = query_namaitem.nama_item,
-            jumlah_subbarang = data['jumlah_subbarang'],
-            subtotal_harga = data['jumlah_subbarang'] * query_namaitem.harga_item
 
-        )
-        db.session.add(orderdetail)
-        db.session.commit()
-
-    return "yes"
-        # query_orderid = Order.query.order_by(desc(user_id=data['user_id'])).limit(1)
-        # arr = []
+        query_orderdetail = Orderdetail.query.filter_by(order_id=max(arr)).all()
         
-    #     try :
-    #         db.session.add(order)
-    #         db.session.commit()
-    #     except :
-    #         return {
-    #             "response" : "error"
-    #         },401
-    #     return {
-    #         "response" : "success",
-    #     },201
-    # else :
-    #     return {
-    #         "message" : "data penuh"
-    #     },401
+        kalkulasi_total = 0
+        kalkulasi_barang = 0
+        for i in query_orderdetail :
+            kalkulasi_total += i.subtotal_harga
+            kalkulasi_barang += i.jumlah_subbarang
 
-@app.route('/order/change_order_status/<id>', methods=['PUT'])
-def change_order_status(id):
-    # data = request.get_json()
-    order = Order.query.filter(Order.user_id == id).first()
-    if order == "pending" :
-        order.order_status = "activate"
-    return jsonify(
-        {
-            "order":order.order_status
-            }
-        
-    )
-    # if order.order_status == "pending" :
-    #     order.order_status = 'activate'
-    # try :
-    #     db.session.commit()
-    # except :
-    #     return {
-    #         "response" : "error"
-    #     },401
-    # return {
-    #     "response" : "success",
-    #     },201
+        query_order_2 = Order.query.filter_by(order_id = max(arr)).first()
+        query_order_2.total_harga = kalkulasi_total
+        query_order_2.jumlah_barang = kalkulasi_barang
+
+        try :
+            # db.session.add(order)
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+            },401
+        return {
+        "total" : kalkulasi_total,
+        "barang" : kalkulasi_barang
+    },201
+
+@app.route('/order/check_order_pending/<id>', methods=['PUT'])
+def check_order_pending(id):
+    hitung = Order.query.filter_by(order_status = 'activate').count()
+    query_order = Order.query.filter_by(user_id=id).filter_by(order_status="pending").first()
+    query_user = User.query.filter(User.user_id==query_order.user_id).first()
     
+    if not hitung < 10 :
+            return {
+            "message" : "antrian penuh"
+        }
+    elif query_order.order_status == "pending" :
+        query_order.order_status = "activate"
+        query_orderdetail = Orderdetail.query.filter(query_order.order_id == Orderdetail.order_id).all()
+        for i in query_orderdetail :
+            query_item = Item.query.filter(Item.item_id == i.item_id).first()
+            if query_item.jumlah_item < i.jumlah_subbarang :
+                db.session.delete(query_order)
+                db.session.commit()
+                return jsonify("pesanan lebih dari stok")
+                break
+            query_item.jumlah_item -= i.jumlah_subbarang
+            query_item.jumlah_terbeli += i.jumlah_subbarang
+            # db.session.commit()
+            
+  
+        query_user.total_pembelian += 1
 
-@app.route('/order/cancel_order/', methods=['DELETE'])
+    try :
+        # db.session.add()
+        db.session.commit()
+    except :
+        return {
+            "response" : "error"
+        },401
+    return {
+        "response" : "success"
+    },201
+
+@app.route('/order/check_order_activate/<id>', methods=['PUT'])
+def check_order_activate(id):
+    # data = request.get_json()
+    # hitung = Order.query.filter_by(order_status = 'activate').count()
+    query_order = Order.query.filter_by(user_id=id).filter_by(order_status="activate").first()
+    query_user = User.query.filter(User.user_id==query_order.user_id).first()
+
+    if query_order.order_status == "activate" :
+        query_order.order_status = "completed"
+
+        try :
+            # db.session.add()
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+            },401
+        return {
+            "response" : "success",
+            "order_id" : query_order.order_id,
+            "user_id" : query_user.user_id,
+            "nama_user" : query_user.nama_user,
+            "order_status" : "completed"
+        },201
+
+@app.route('/order/cancel_order', methods=['DELETE'])
 def cancel_order():
     auth = BasicAuth()
     if not auth :
         return jsonify ("auth error")
     else :
-        try :
-            Order.query.filter_by(order_status = 'pending').filter_by(user_id=auth).delete()
-            db.session.commit()
-        except :
-            return {
-                "response" : "error"
-                },401
+        Order.query.filter(Order.order_status == "pending").filter_by(user_id=auth).delete()
+    try :
+        # order = Order.query.filter(Order.order_status == "pending").filter_by(user_id=id).delete()
+        db.session.commit()
+    except :
         return {
-            "response" : "success",
-            },201
+            "response" : "error"
+            },401
+    return {
+        "response" : "success"
+        },201
+
 
 # Reporting API
 @app.route('/reporting/top5_user', methods=['GET'])
