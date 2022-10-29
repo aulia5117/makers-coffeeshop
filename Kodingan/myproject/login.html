@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="icon" type="image/x-icon" href="/globe.png">
+</head>
+<body class="main-bg">
+    <h2>Coffee Shop Login</h2>
+    <!-- Register -->
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1>Create Account</h1>
+                <input id="registerName" type="text" placeholder="Name" />
+                <input id="registerEmail" type="email" placeholder="Email" />
+                <input id="registerUsername" type="text" placeholder="Username" />
+                <input id="registerPassword" type="password" placeholder="Password" />
+                <button onclick="register()">Register</button>
+            </form>
+        </div>
+        
+        <!-- Sign In -->
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1>Log in</h1>
+                <input id="username" type="text" placeholder="Username" />
+                <input id="password" type="password" placeholder="Password" />
+                <a href="#">Forgot your password?</a>
+                <button type='button' onclick="signIn()">Log In</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Sudah punya akun ?</h1>
+                    <p>Silahkan tekan tombol "Log in" untuk masuk</p>
+                    <button class="ghost" id="signIn">Log In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Belum punya akun ?</h1>
+                    <p>Silahkan tekan tombol "register" untuk membuat akun</p>
+                    <button class="ghost" id="signUp">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- <footer>
+        <p>
+            Created with <i class="fa fa-heart"></i> by
+            <a target="_blank" href="https://florin-pop.com">Florin Pop</a>
+            - Read how I created this and how you can join the challenge
+            <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+        </p>
+    </footer> -->
+
+    <script src="assets/js/login.js"></script>
+    <!-- <script>
+        function deleteCookies() {
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure";
+        }
+    </script>   -->
+</body>
+</html>
