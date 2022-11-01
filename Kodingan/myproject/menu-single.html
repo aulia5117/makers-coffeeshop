@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Qofi Menu</title>
+    <title>Qofi</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -16,6 +16,10 @@
     <!-- Load fonts style after rendering the layout styles -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+
+    <!-- Slick -->
+    <link rel="stylesheet" type="text/css" href="assets/css/slick.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/slick-theme.css">
 <!--
     
 TemplateMo 559 Zay Shop
@@ -25,7 +29,7 @@ https://templatemo.com/tm-559-zay-shop
 -->
 </head>
 
-<body onload="checkCookie(); getItem()">
+<body onload="checkCookie();getItemById();">
 
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light shadow sticky-top">
@@ -89,14 +93,14 @@ https://templatemo.com/tm-559-zay-shop
                   </div>
                 </div>
               </div>
-              <a
+              <!-- <a
                 class="nav-icon d-none d-lg-inline"
                 href="#"
                 data-bs-toggle="modal"
                 data-bs-target="#templatemo_search"
               >
                 <i class="fa fa-fw fa-search text-dark mr-2"></i>
-              </a>
+              </a> -->
               <a
                 class="nav-icon position-relative text-decoration-none me-5"
                 href="#"
@@ -119,7 +123,6 @@ https://templatemo.com/tm-559-zay-shop
           </div>
         </div>
       </nav>
-      <!-- Close Header -->
 
     <!-- Modal -->
     <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -140,115 +143,152 @@ https://templatemo.com/tm-559-zay-shop
 
 
 
-    <!-- Start Content -->
-    <div class="container py-5">
-        <div class="row">
-    <!-- Content Header -->
-            <div class="col-lg-3">
-                <h1 class="h2 pb-4">Categories</h1>
-                <ul class="list-unstyled templatemo-accordion">
-                    <li class="pb-3">
-                        <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
-                            Gender
-                            <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
-                        </a>
-                        <ul class="collapse show list-unstyled pl-3">
-                            <li><a class="text-decoration-none" href="#">Men</a></li>
-                            <li><a class="text-decoration-none" href="#">Women</a></li>
-                        </ul>
-                    </li>
-                    <li class="pb-3">
-                        <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
-                            Sale
-                            <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
-                        </a>
-                        <ul id="collapseTwo" class="collapse list-unstyled pl-3">
-                            <li><a class="text-decoration-none" href="#">Sport</a></li>
-                            <li><a class="text-decoration-none" href="#">Luxury</a></li>
-                        </ul>
-                    </li>
-                    <li class="pb-3">
-                        <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
-                            Product
-                            <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
-                        </a>
-                        <ul id="collapseThree" class="collapse list-unstyled pl-3">
-                            <li><a class="text-decoration-none" href="#">Bag</a></li>
-                            <li><a class="text-decoration-none" href="#">Sweather</a></li>
-                            <li><a class="text-decoration-none" href="#">Sunglass</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col-lg-9">
-                <div class="row">
-                    <!-- <div class="col-md-6">
-                        <ul class="list-inline shop-top-menu pb-3 pt-1">
-                            <li class="list-inline-item">
-                                <a class="h3 text-dark text-decoration-none mr-3" href="#">All</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a class="h3 text-dark text-decoration-none mr-3" href="#">Men's</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a class="h3 text-dark text-decoration-none" href="#">Women's</a>
-                            </li>
-                        </ul>
+    <!-- Open Content -->
+    <section class="bg-light">
+        <div class="container pb-5">
+            <div class="row">
+                <div class="col-lg-5 mt-5">
+                    <div class="card mb-3">
+                        <img class="card-img img-fluid" src="assets/img/product_single_10.jpg" alt="Card image cap" id="product-detail">
                     </div>
-                    <div class="col-md-6 pb-4">
-                        <div class="d-flex">
-                            <select class="form-control">
-                                <option>Featured</option>
-                                <option>A to Z</option>
-                                <option>Item</option>
-                            </select>
-                        </div>
-                    </div> -->
-                </div>
-            <!-- Menu -->
-                <div id="menu-parent" class="row">
-                    <!-- <div class="col-md-4">
-                        <div class="card mb-4 product-wap rounded-0">
-                            <a href="shop-single.html" class="text-decoration-none">
-                            <div class="card rounded-0">
-                                <img class="card-img rounded-0 img-fluid" src="assets/img/shop_01.jpg">
-                                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                    <div class="row">
+                        <!--Start Controls-->
+                        <!-- <div class="col-1 align-self-center">
+                            <a href="#multi-item-example" role="button" data-bs-slide="prev">
+                                <i class="text-dark fas fa-chevron-left"></i>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </div> -->
+                        <!--End Controls-->
+                        <!--Start Carousel Wrapper-->
+                        <div id="multi-item-example" class="col-10 carousel slide carousel-multi-item" data-bs-ride="carousel">
+                            <!--Start Slides-->
+                            <div class="carousel-inner product-links-wap" role="listbox">
 
-                                </div>
+                                <!--First slide-->
+                                <!-- <div class="carousel-item active">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="assets/img/product_single_01.jpg" alt="Product Image 1">
+                                            </a>
+                                        </div>
+                                        <div class="col-4">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="assets/img/product_single_02.jpg" alt="Product Image 2">
+                                            </a>
+                                        </div>
+                                        <div class="col-4">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="assets/img/product_single_03.jpg" alt="Product Image 3">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!--/.First slide-->
+
+                                <!--Second slide-->
+                                <!-- <div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="assets/img/product_single_04.jpg" alt="Product Image 4">
+                                            </a>
+                                        </div>
+                                        <div class="col-4">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="assets/img/product_single_05.jpg" alt="Product Image 5">
+                                            </a>
+                                        </div>
+                                        <div class="col-4">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="assets/img/product_single_06.jpg" alt="Product Image 6">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!--/.Second slide-->
+
+                                <!--Third slide-->
+                                <!-- <div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="assets/img/product_single_07.jpg" alt="Product Image 7">
+                                            </a>
+                                        </div>
+                                        <div class="col-4">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="assets/img/product_single_08.jpg" alt="Product Image 8">
+                                            </a>
+                                        </div>
+                                        <div class="col-4">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="assets/img/product_single_09.jpg" alt="Product Image 9">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!--/.Third slide-->
                             </div>
-                            <div class="card-body text-center">
-                                <p class="h3 text-decoration-none">Nama Item</p>
-                                <p class="text-center mb-0"> Harga Item $250.00</p>
-                            </div>
+                            <!--End Slides-->
                         </div>
-                        </a>
-                    </div> -->
-                    
+                        <!--End Carousel Wrapper-->
+                        <!--Start Controls-->
+                        <!-- <div class="col-1 align-self-center">
+                            <a href="#multi-item-example" role="button" data-bs-slide="next">
+                                <i class="text-dark fas fa-chevron-right"></i>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div> -->
+                        <!--End Controls-->
+                    </div>
                 </div>
-                <div div="row">
-                    <ul class="pagination pagination-lg justify-content-end">
-                        <li class="page-item disabled">
-                            <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#" tabindex="-1">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
-                        </li>
-                    </ul>
+                <!-- col end -->
+                <div class="col-lg-7 mt-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 id="single-nama-item" class="h2">Nama Item</h1>
+                            <span id="single-item-id" hidden>1</span>
+                            <p id="single-harga-item" class="h3 py-2">Harga Item</p>
+                            <h6>Deskripsi:</h6>
+                            <p id="single-deskripsi">Detil deskripsi</p>
+                            <form action="" method="GET">
+                                <input type="hidden" name="product-title" value="Activewear">
+                                <div class="row">
+                                    
+                                    <div class="col-auto">
+                                        <ul class="list-inline pb-3">
+                                            <li class="list-inline-item text-right">
+                                                Quantity
+                                                <input type="hidden" name="product-quantity" id="product-quantity" value="1">
+                                            <li>
+                                                <input id="item-quantity" type="number" value="1" min="1"/>
+                                            </li>
+                                            <!-- </li>
+                                            <li class="list-inline-item"><span class="btn btn-success" id="btn-minus">-</span></li>
+                                            <li class="list-inline-item"><span class="badge bg-secondary" id="var-value">1</span></li>
+                                            <li class="list-inline-item"><span class="btn btn-success" id="btn-plus">+</span></li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row pb-3">
+                                    <div class="col d-grid">
+                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Buy</button>
+                                    </div>
+                                    <div class="col d-grid">
+                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="addtocard">Add To Cart</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-    </div>
-    <!-- End Content -->
-
-    <!-- Start Brands -->
-
-    <!--End Brands-->
-
+    </section>
+    <!-- Close Content -->
 
     <!-- Start Footer -->
     <footer class="bg-dark" id="tempaltemo_footer">
@@ -351,8 +391,14 @@ https://templatemo.com/tm-559-zay-shop
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/templatemo.js"></script>
     <script src="assets/js/custom.js"></script>
-    <script src="assets/js/menu.js"></script>
+    <script src="assets/js/menu-single.js"></script>
     <!-- End Script -->
+
+    <!-- Start Slider Script -->
+    <script src="assets/js/slick.min.js"></script>
+    
+    <!-- End Slider Script -->
+
 </body>
 
 </html>

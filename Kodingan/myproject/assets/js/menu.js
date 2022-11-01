@@ -16,12 +16,11 @@ function getItem() {
               text += 
                `<div class="col-md-4">
                         <div class="card mb-4 product-wap rounded-0">
-                            <a href="shop-single.html" class="text-decoration-none">
+                            <a href="#" onclick="pageItem(${item.item_id})" class="text-decoration-none">
+                            <span id="itemId${item.item_id}" hidden>${item.item_id}</span>
                             <div class="card rounded-0">
                                 <img class="card-img rounded-0 img-fluid" src="assets/img/shop_01.jpg">
-                                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-
-                                </div>
+                                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center"></div>
                             </div>
                             <div class="card-body text-center">
                                 <p class="h3 text-decoration-none">${item.nama_item}</p>
@@ -29,8 +28,14 @@ function getItem() {
                             </div>
                         </div>
                         </a>
-                </div>` 
+                    </div>` 
             }
         })
         .catch(error => console.log('error fetching', error));
+}
+
+function pageItem(param) {
+    let a = document.getElementById('itemId'+param).textContent
+    location.href = "menu-single.html?id="+param+""
+    console.log(a)
 }

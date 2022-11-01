@@ -48,6 +48,14 @@ class Kategori(db.Model):
     nama_kategori = db.Column(db.String(200), nullable=False)
     deskripsi = db.Column(db.String(200), nullable=False)
 
+class CartOrder(db.Model):
+    cart_order_id = db.Column(db.Integer, primary_key=True, index=True, nullable=False, unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id',ondelete='CASCADE'))
+    item_id = db.Column(db.Integer, nullable=False)
+    nama_item = db.Column(db.String(50), nullable=False)
+    jumlah_barang = db.Column(db.Integer)
+    total_harga = db.Column(db.Integer)
+
 class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True, index=True, nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id',ondelete='CASCADE'))
@@ -88,6 +96,7 @@ def BasicAuth() :
         token = jwt.encode({
             'username': username_aja,
             'passkey' :pass_cek,
+            'id' : user.user_id,
             'exp': datetime.now() + dt.timedelta(hours=24)
             },
             'secret' ,algorithm='HS256')
@@ -102,14 +111,12 @@ def BasicAuth() :
 
 
 
-# Home
+# Home &
 @app.route('/', methods=['GET'])
 def home():
     return jsonify(
         "Home dari Coffee Shop"
     )
-
-
 
 @app.route('/tes', methods=['GET'])
 def tes():
@@ -224,7 +231,7 @@ def user_update():
 # Item API
 @app.route('/get_all_item', methods=['GET'])
 def get_all_item():
-    get_item = db.engine.execute('''SELECT * FROM "item" ORDER BY nama_item''')
+    get_all_item = db.engine.execute('''SELECT * FROM "item" ORDER BY nama_item''')
     try :
         db.engine.execute('''SELECT * FROM "item" ORDER BY nama_item''')
         db.session.commit()
@@ -240,8 +247,29 @@ def get_all_item():
         'harga_item' : item.harga_item,
         'jumlah_item' : item.jumlah_item,
         'kategori' : item.kategori_id
+        } for item in get_all_item
+    ])
+
+@app.route('/get_item/<id>', methods=['GET'])
+def get_item(id):
+    get_item = db.engine.execute(f'''SELECT * FROM item WHERE item_id = {id}''')
+    try :
+        db.engine.execute(f'''SELECT * FROM item WHERE item_id = {id}''')
+        db.session.commit()
+    except :
+        return {
+            "response" : "error"
+            },401
+    return jsonify([
+        {
+        'item_id' : item.item_id,
+        'nama_item' : item.nama_item,
+        'deskripsi' : item.deskripsi,
+        'harga_item' : item.harga_item,
+        'jumlah_item' : item.jumlah_item,
+        'kategori' : item.kategori_id
         } for item in get_item
-    ]) 
+    ])  
 
 @app.route('/item/add_item', methods=['POST'])
 def add_item():
@@ -350,65 +378,130 @@ def item_update(id):
 
 
 # Order API
+# @app.route('/order/add_order', methods=['POST']) # Backend Only
+# def add_order():
+    # auth = BasicAuth()
+    # if not auth :
+    #     return jsonify("auth error")
+    # else :
+        # return {"yes" : auth[0]}
+        # data = request.get_json()
+        # order = data["orderan"]
+        # input_item = data['item_id']
+        # input_user = data['user_id']
+        # query_item = Item.query.filter_by(item_id=input_item).first()
+        # query_user = User.query.filter_by(user_id=auth[0]).first()
+        # order = Order(
+        #     user_id = auth[0],
+        #     order_date = datetime.now()
+        # )
+        # db.session.add(order)
+        # db.session.commit()
+        # query_orderid = Order.query.all()
+        # arr = []
+        # for i in query_orderid :
+        #     arr.append(i.order_id)
+
+        # for i in range(len(data["orderan"])) :
+        #     query_item = Item.query.filter_by(item_id = data['orderan'][i]).first()
+        #     orderdetail = Orderdetail(
+        #         order_id = max(arr),
+        #         item_id = query_item.item_id,
+        #         nama_item = data['orderan'][i],
+        #         jumlah_subbarang = data['jumlah_subbarang'][i],
+        #         subtotal_harga = data['jumlah_subbarang'][i] * query_item.harga_item
+        #     ) 
+        #     db.session.add(orderdetail)
+        #     db.session.commit()
+
+
+        # query_orderdetail = Orderdetail.query.filter_by(order_id=max(arr)).all()
+        
+        # kalkulasi_total = 0
+        # kalkulasi_barang = 0
+        # for i in query_orderdetail :
+        #     kalkulasi_total += i.subtotal_harga
+        #     kalkulasi_barang += i.jumlah_subbarang
+
+        # query_order_2 = Order.query.filter_by(order_id = max(arr)).first()
+        # query_order_2.total_harga = kalkulasi_total
+        # query_order_2.jumlah_barang = kalkulasi_barang
+
+        # try :
+            # db.session.add(order)
+        #     db.session.commit()
+        # except :
+        #     return {
+        #         "response" : "error"
+        #     },401
+    #     return {
+    #     # "total" : kalkulasi_total,
+    #     # "barang" : kalkulasi_barang
+    #     "tes" : order
+    # },201
+
 @app.route('/order/add_order', methods=['POST'])
-def add_order():
+# Format Input :
+# {
+#     "orderan" :[
+#         {"item_id" : 10,
+#         "jumlah_subbarang" : 1
+#         }
+#     ]
+# }
+def add_order() :
     auth = BasicAuth()
     if not auth :
         return jsonify("auth error")
     else :
-        # return {"yes" : auth[0]}
-        data = request.get_json()
-        # input_item = data['item_id']
-        # input_user = data['user_id']
-        # query_item = Item.query.filter_by(item_id=input_item).first()
-        query_user = User.query.filter_by(user_id=auth[0]).first()
+        # data = request.get_json()
+        user_order = CartOrder.query.filter_by(user_id=auth[0]).all()
         order = Order(
             user_id = auth[0],
             order_date = datetime.now()
         )
         db.session.add(order)
         db.session.commit()
-        query_orderid = Order.query.all()
-        arr = []
-        for i in query_orderid :
-            arr.append(i.order_id)
-
-        for i in range(len(data["orderan"])) :
-            query_item = Item.query.filter_by(item_id = data['orderan'][i]).first()
-            orderdetail = Orderdetail(
-                order_id = max(arr),
-                item_id = query_item.item_id,
-                nama_item = data['orderan'][i],
-                jumlah_subbarang = data['jumlah_subbarang'][i],
-                subtotal_harga = data['jumlah_subbarang'][i] * query_item.harga_item
-            ) 
-            db.session.add(orderdetail)
-            db.session.commit()
-
-
-        query_orderdetail = Orderdetail.query.filter_by(order_id=max(arr)).all()
         
-        kalkulasi_total = 0
-        kalkulasi_barang = 0
-        for i in query_orderdetail :
-            kalkulasi_total += i.subtotal_harga
-            kalkulasi_barang += i.jumlah_subbarang
+        return jsonify([
+            {
+            'user_id' : item.user_id,
+            'item_id' : item.item_id,
+            'nama_item' : item.nama_item
+            } for item in user_order
+        ]) 
 
-        query_order_2 = Order.query.filter_by(order_id = max(arr)).first()
-        query_order_2.total_harga = kalkulasi_total
-        query_order_2.jumlah_barang = kalkulasi_barang
+
+@app.route('/order/add_cart_order', methods=['POST'])
+def add_cart_order():
+    auth = BasicAuth()
+    if not auth :
+        return jsonify("auth error")
+    else :
+        data = request.get_json()
+        query_user = User.query.filter_by(user_id=auth[0]).first()
+
+        input_item = data["item_id"]
+        query_item = Item.query.filter_by(item_id=input_item).first()
+        
+        cart_order = CartOrder(
+            user_id = auth[0],
+            item_id = query_item.item_id,
+            nama_item = query_item.nama_item,
+            jumlah_barang = data['jumlah_barang'],
+            total_harga = query_item.harga_item * data['jumlah_barang']
+        )
 
         try :
-            # db.session.add(order)
+            db.session.add(cart_order)
             db.session.commit()
         except :
             return {
                 "response" : "error"
             },401
         return {
-        "total" : kalkulasi_total,
-        "barang" : kalkulasi_barang
-    },201
+            "response" : "success"
+        },201
 
 @app.route('/order/check_order_pending/<id>', methods=['PUT'])
 def check_order_pending(id):
