@@ -1,5 +1,6 @@
 import base64
 import datetime as dt
+import json
 from datetime import datetime
 
 import jwt
@@ -456,21 +457,63 @@ def add_order() :
     else :
         # data = request.get_json()
         user_order = CartOrder.query.filter_by(user_id=auth[0]).all()
+        user_order_arr = [
+            {
+            'user_id' : item.user_id,
+            'item_id' : item.item_id,
+            'nama_item' : item.nama_item,
+            'jumlah_barang' : item.jumlah_barang
+            } for item in user_order
+        ]
+
         order = Order(
             user_id = auth[0],
             order_date = datetime.now()
         )
         db.session.add(order)
         db.session.commit()
-        
-        return jsonify([
-            {
-            'user_id' : item.user_id,
-            'item_id' : item.item_id,
-            'nama_item' : item.nama_item
-            } for item in user_order
-        ]) 
 
+        orderid_target = Order.query.filter_by(user_id=auth[0]).all()
+        orderid_arr = []
+        for i in orderid_target :
+            orderid_arr.append(i.order_id)
+
+        cart_length = len(user_order)
+        for i in range(cart_length) :
+                query_item = Item.query.filter_by(item_id = user_order_arr[i]['item_id']).first()
+                orderdetail = Orderdetail(
+                    order_id = max(orderid_arr),
+                    item_id = query_item.item_id,
+                    nama_item = query_item.nama_item,
+                    jumlah_subbarang = user_order_arr[i]['jumlah_barang'],
+                    subtotal_harga = user_order_arr[i]['jumlah_barang'] * query_item.harga_item
+                ) 
+                db.session.add(orderdetail)
+                db.session.commit()
+
+        query_orderdetail = Orderdetail.query.filter_by(order_id=max(orderid_arr)).all()
+
+        kalkulasi_total = 0
+        kalkulasi_barang = 0
+        for i in query_orderdetail :
+            kalkulasi_total += i.subtotal_harga
+            kalkulasi_barang += i.jumlah_subbarang
+
+        query_order_2 = Order.query.filter_by(order_id = max(orderid_arr)).first()
+        query_order_2.total_harga = kalkulasi_total
+        query_order_2.jumlah_barang = kalkulasi_barang
+
+        try :
+            db.session.add(order)
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+            },401
+        return {
+        "total" : kalkulasi_total,
+        "barang" : kalkulasi_barang
+        },201
 
 @app.route('/order/add_cart_order', methods=['POST'])
 def add_cart_order():

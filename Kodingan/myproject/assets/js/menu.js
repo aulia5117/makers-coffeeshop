@@ -19,7 +19,7 @@ function getItem() {
                             <a href="#" onclick="pageItem(${item.item_id})" class="text-decoration-none">
                             <span id="itemId${item.item_id}" hidden>${item.item_id}</span>
                             <div class="card rounded-0">
-                                <img class="card-img rounded-0 img-fluid" src="assets/img/shop_01.jpg">
+                                <img class="card-img rounded-0 img-fluid" src="assets/img/coffee-sample.jpg">
                                 <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center"></div>
                             </div>
                             <div class="card-body text-center">

@@ -926,12 +926,12 @@ readers do not read off random characters that represent icons */
 
 .fa-chevron-left:before {
   content: "\f053";
-  color: rgba(124, 19, 19, 0.792);
+  /* color: rgba(124, 19, 19, 0.792); */
 }
 
 .fa-chevron-right:before {
   content: "\f054";
-  color: rgba(124, 19, 19, 0.792);
+  /* color: rgba(124, 19, 19, 0.792); */
 }
 
 .fa-chevron-up:before {
