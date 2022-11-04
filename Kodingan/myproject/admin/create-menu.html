@@ -37,7 +37,7 @@
   ======================================================== -->
 </head>
 
-<body onload="getTop5User(); getTop5Item()">
+<body onload="getKategori()">
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -108,28 +108,34 @@
             <h5 class="card-title"></h5>
 
             <!-- Start Form -->
-            <form action="" class="row g-3">
+            <!-- <form action="" class="row g-3"> -->
               <div class="col-12">
                 <label for="input-nama-item" class="form-label">Nama Item</label>
                 <input type="text" class="form-control" id="input-nama-item">
               </div>
               <div class="col-12">
-                <label for="input-deskripsi" class="form-label">Deskripsi Item</label>
-                <input type="email" class="form-control" id="input-deskripsi">
+                <label for="input-deskripsi" class="form-label">Deskripsi</label>
+                <textarea name="input-deskripsi" class="form-control" id="input-deskripsi"></textarea>
               </div>
               <div class="col-12">
                 <label for="input-harga-item" class="form-label">Harga Item (IDR)</label>
-                <input type="number" class="form-control" id="input-harga-item">
+                <input type="number" class="form-control" id="input-harga-item" min="1000" value="1000" step="1000">
               </div>
               <div class="col-12">
-                <label for="input-stok-item" class="form-label">Stok Tersedia</label>
-                <input type="number" class="form-control" id="input-stok-item" min="1" placeholder="Minimal harus 1...">
+                <label for="input-jumlah-item" class="form-label">Jumlah Item</label>
+                <input type="number" class="form-control" id="input-jumlah-item" min="1" value="1">
+              </div>
+              <div class="col-12 dropdown">
+                <label for="input-kategori" class="form-label">Kategori</label>
+                <select id="input-kategori" name="input-kategori">
+                  <option value="id">Kategori</option>
+                </select> 
               </div>
               <div class="text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button onclick="postMenu()" class="btn btn-primary">Submit</button>
                 <button type="reset" class="btn btn-secondary">Reset</button>
               </div>
-            </form>
+            <!-- </form> -->
             <!-- End Form -->
 
           </div>
@@ -138,7 +144,8 @@
       </div>
     </section>
 
-  </main><!-- End #main -->
+  </main>
+  <!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">

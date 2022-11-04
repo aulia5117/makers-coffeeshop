@@ -271,16 +271,33 @@ def get_item(id):
         'jumlah_item' : item.jumlah_item,
         'kategori' : item.kategori_id
         } for item in get_item
-    ])  
+    ]) 
+
+@app.route('/get_kategori', methods=['GET'])
+def get_kategori():
+    get_kategori = db.engine.execute('''SELECT * FROM "kategori" ORDER BY nama_kategori''')
+    try :
+        db.engine.execute('''SELECT * FROM "kategori" ORDER BY nama_kategori''')
+        db.session.commit()
+    except :
+        return {
+            "response" : "error"
+            },401
+    return jsonify([
+        {
+        'kategori_id' : item.kategori_id,
+        'nama_kategori' : item.nama_kategori
+        } for item in get_kategori
+    ]),200
 
 @app.route('/item/add_item', methods=['POST'])
 def add_item():
-    auth = BasicAuth()
-    if auth[1] != True :
-        return {
-            "response" : "unauthorized"
-        }
-    else :
+    # auth = BasicAuth()
+    # if auth[1] != True :
+    #     return {
+    #         "response" : "unauthorized"
+    #     }
+    # else :
         data = request.get_json()
         item = Item(
             nama_item = data['nama_item'],

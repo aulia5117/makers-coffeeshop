@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="assets/css/fontawesome.css" />
   </head>
 
-  <body onload="checkCookie()">
+  <body onload="checkCookie();notifCart()";>
     <!-- Start Top Nav -->
     <!-- <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
         <div class="container text-light">
@@ -121,7 +121,7 @@
               href="keranjang.html"
             >
               <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-              <span
+              <span id="cart-count"
                 class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"
                 >0</span
               >
@@ -227,108 +227,7 @@
       </div>
     </div>
 
-    <!-- Login Modal -->
-    <div
-      class="modal fade bg-white"
-      id="loginYaGes"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="d-flex justify-content-center align-items-center mt-5">
-        <div class="card">
-          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item text-center">
-              <a
-                class="nav-link active btl"
-                id="pills-home-tab"
-                data-toggle="pill"
-                href="#pills-home"
-                role="tab"
-                aria-controls="pills-home"
-                aria-selected="true"
-                >Login</a
-              >
-            </li>
-            <li class="nav-item text-center">
-              <a
-                class="nav-link btr"
-                id="pills-profile-tab"
-                data-toggle="pill"
-                href="#pills-profile"
-                role="tab"
-                aria-controls="pills-profile"
-                aria-selected="false"
-                >Signup</a
-              >
-            </li>
-          </ul>
-          <div class="tab-content" id="pills-tabContent">
-            <div
-              class="tab-pane fade show active"
-              id="pills-home"
-              role="tabpanel"
-              aria-labelledby="pills-home-tab"
-            >
-              <div class="form px-4 pt-5">
-                <input
-                  type="text"
-                  name=""
-                  class="form-control"
-                  placeholder="Email or Phone"
-                />
-
-                <input
-                  type="text"
-                  name=""
-                  class="form-control"
-                  placeholder="Password"
-                />
-                <button class="btn btn-dark btn-block">Login</button>
-              </div>
-            </div>
-            <div
-              class="tab-pane fade"
-              id="pills-profile"
-              role="tabpanel"
-              aria-labelledby="pills-profile-tab"
-            >
-              <div class="form px-4">
-                <input
-                  type="text"
-                  name=""
-                  class="form-control"
-                  placeholder="Name"
-                />
-
-                <input
-                  type="text"
-                  name=""
-                  class="form-control"
-                  placeholder="Email"
-                />
-
-                <input
-                  type="text"
-                  name=""
-                  class="form-control"
-                  placeholder="Phone"
-                />
-
-                <input
-                  type="text"
-                  name=""
-                  class="form-control"
-                  placeholder="Password"
-                />
-
-                <button class="btn btn-dark btn-block">Signup</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    
 
     <!-- Start Banner Hero -->
     <div
