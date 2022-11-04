@@ -7,7 +7,7 @@ function checkCookie() {
         document.getElementById('loginbutton').style.display = "none";
         const split = token.split(".");
         let parsedToken = JSON.parse(atob(split[1]));
-        // console.log(parsedToken)
+        console.log(parsedToken)
         let username = parsedToken["username"]
         // console.log(username)
         let userLabel = document.getElementById('userprofile').lastElementChild;
@@ -20,3 +20,8 @@ function checkCookie() {
 function movePage() {
     location.href = 'login.html'
   }
+
+function logout() {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    location.reload()
+}

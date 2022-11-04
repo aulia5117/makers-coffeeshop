@@ -103,7 +103,7 @@ https://templatemo.com/tm-559-zay-shop
               </a> -->
               <a
                 class="nav-icon position-relative text-decoration-none me-5"
-                href="#"
+                href="keranjang.html"
               >
                 <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                 <span
@@ -123,25 +123,6 @@ https://templatemo.com/tm-559-zay-shop
           </div>
         </div>
       </nav>
-
-    <!-- Modal -->
-    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="w-100 pt-1 mb-5 text-right">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="" method="get" class="modal-content modal-body border-0 p-0">
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
-                    <button type="submit" class="input-group-text bg-success text-light">
-                        <i class="fa fa-fw fa-search text-white"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
 
     <!-- Open Content -->
     <section class="bg-light">
@@ -165,83 +146,9 @@ https://templatemo.com/tm-559-zay-shop
                             <!--Start Slides-->
                             <div class="carousel-inner product-links-wap" role="listbox">
 
-                                <!--First slide-->
-                                <!-- <div class="carousel-item active">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="assets/img/product_single_01.jpg" alt="Product Image 1">
-                                            </a>
-                                        </div>
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="assets/img/product_single_02.jpg" alt="Product Image 2">
-                                            </a>
-                                        </div>
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="assets/img/product_single_03.jpg" alt="Product Image 3">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <!--/.First slide-->
-
-                                <!--Second slide-->
-                                <!-- <div class="carousel-item">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="assets/img/product_single_04.jpg" alt="Product Image 4">
-                                            </a>
-                                        </div>
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="assets/img/product_single_05.jpg" alt="Product Image 5">
-                                            </a>
-                                        </div>
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="assets/img/product_single_06.jpg" alt="Product Image 6">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <!--/.Second slide-->
-
-                                <!--Third slide-->
-                                <!-- <div class="carousel-item">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="assets/img/product_single_07.jpg" alt="Product Image 7">
-                                            </a>
-                                        </div>
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="assets/img/product_single_08.jpg" alt="Product Image 8">
-                                            </a>
-                                        </div>
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="assets/img/product_single_09.jpg" alt="Product Image 9">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <!--/.Third slide-->
                             </div>
                             <!--End Slides-->
                         </div>
-                        <!--End Carousel Wrapper-->
-                        <!--Start Controls-->
-                        <!-- <div class="col-1 align-self-center">
-                            <a href="#multi-item-example" role="button" data-bs-slide="next">
-                                <i class="text-dark fas fa-chevron-right"></i>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div> -->
-                        <!--End Controls-->
                     </div>
                 </div>
                 <!-- col end -->
@@ -253,17 +160,17 @@ https://templatemo.com/tm-559-zay-shop
                             <p id="single-harga-item" class="h3 py-2">Harga Item</p>
                             <h6>Deskripsi:</h6>
                             <p id="single-deskripsi">Detil deskripsi</p>
-                            <form action="" method="GET">
-                                <input type="hidden" name="product-title" value="Activewear">
+                           
+                                
                                 <div class="row">
                                     
                                     <div class="col-auto">
                                         <ul class="list-inline pb-3">
                                             <li class="list-inline-item text-right">
                                                 Quantity
-                                                <input type="hidden" name="product-quantity" id="product-quantity" value="1">
+                                                
                                             <li>
-                                                <input id="item-quantity" type="number" value="1" min="1"/>
+                                                <input id="item-quantity" type="number" value="1" min="1"/><span hidden id="wadah-value"></span>
                                             </li>
                                             <!-- </li>
                                             <li class="list-inline-item"><span class="btn btn-success" id="btn-minus">-</span></li>
@@ -274,14 +181,14 @@ https://templatemo.com/tm-559-zay-shop
                                 </div>
                                 <div class="row pb-3">
                                     <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Buy</button>
+                                        <button onclick="buyToCart()" class="btn btn-success btn-lg">Buy</button>
                                     </div>
                                     <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg" name="submit" value="addtocard">Add To Cart</button>
+                                        <button onclick="addToCart()" class="btn btn-success btn-lg">Add To Cart
+                            
+                                        </button>
                                     </div>
                                 </div>
-                            </form>
-
                         </div>
                     </div>
                 </div>
@@ -290,100 +197,118 @@ https://templatemo.com/tm-559-zay-shop
     </section>
     <!-- Close Content -->
 
-    <!-- Start Footer -->
-    <footer class="bg-dark" id="tempaltemo_footer">
-        <div class="container">
-            <div class="row">
-
+        <!-- Start Footer -->
+        <footer class="bg-dark" id="tempaltemo_footer">
+            <div class="container">
+              <div class="row">
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Zay Shop</h2>
-                    <ul class="list-unstyled text-light footer-link-list">
-                        <li>
-                            <i class="fas fa-map-marker-alt fa-fw"></i>
-                            123 Consectetur at ligula 10660
-                        </li>
-                        <li>
-                            <i class="fa fa-phone fa-fw"></i>
-                            <a class="text-decoration-none" href="tel:010-020-0340">010-020-0340</a>
-                        </li>
-                        <li>
-                            <i class="fa fa-envelope fa-fw"></i>
-                            <a class="text-decoration-none" href="mailto:info@company.com">info@company.com</a>
-                        </li>
-                    </ul>
+                  <h2 class="h2 text-success border-bottom pb-3 border-light logo">
+                    Qofi
+                  </h2>
+                  <ul class="list-unstyled text-light footer-link-list">
+                    <li>
+                      <i class="fas fa-map-marker-alt fa-fw"></i>
+                      Bandung, Indonesia
+                    </li>
+                    <li>
+                      <i class="fa fa-phone fa-fw"></i>
+                      <a class="text-decoration-none" href="tel:010-020-0340"
+                        >012-345-678-9</a
+                      >
+                    </li>
+                    <li>
+                      <i class="fa fa-envelope fa-fw"></i>
+                      <a class="text-decoration-none" href="mailto:info@company.com"
+                        >qofi@company.com</a
+                      >
+                    </li>
+                  </ul>
                 </div>
-
+      
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
-                    <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="#">Luxury</a></li>
-                        <li><a class="text-decoration-none" href="#">Sport Wear</a></li>
-                        <li><a class="text-decoration-none" href="#">Men's Shoes</a></li>
-                        <li><a class="text-decoration-none" href="#">Women's Shoes</a></li>
-                        <li><a class="text-decoration-none" href="#">Popular Dress</a></li>
-                        <li><a class="text-decoration-none" href="#">Gym Accessories</a></li>
-                        <li><a class="text-decoration-none" href="#">Sport Shoes</a></li>
-                    </ul>
+                  <h2 class="h2 text-light border-bottom pb-3 border-light">
+                    Products
+                  </h2>
+                  <ul class="list-unstyled text-light footer-link-list">
+                    <li><a class="text-decoration-none" href="#">Kopi Biasa</a></li>
+                    <li><a class="text-decoration-none" href="#">Kopi Bubuk</a></li>
+                    <li><a class="text-decoration-none" href="#">Kopi Botol</a></li>
+                  </ul>
                 </div>
-
+      
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-light border-bottom pb-3 border-light">Further Info</h2>
-                    <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="#">Home</a></li>
-                        <li><a class="text-decoration-none" href="#">About Us</a></li>
-                        <li><a class="text-decoration-none" href="#">Shop Locations</a></li>
-                        <li><a class="text-decoration-none" href="#">FAQs</a></li>
-                        <li><a class="text-decoration-none" href="#">Contact</a></li>
-                    </ul>
+                  <h2 class="h2 text-light border-bottom pb-3 border-light">
+                    Further Info
+                  </h2>
+                  <ul class="list-unstyled text-light footer-link-list">
+                    <li><a class="text-decoration-none" href="#">Home</a></li>
+                    <li><a class="text-decoration-none" href="#">About Us</a></li>
+                  </ul>
                 </div>
-
-            </div>
-
-            <div class="row text-light mb-4">
+              </div>
+      
+              <div class="row text-light mb-4">
                 <div class="col-12 mb-3">
-                    <div class="w-100 my-3 border-top border-light"></div>
+                  <div class="w-100 my-3 border-top border-light"></div>
                 </div>
                 <div class="col-auto me-auto">
-                    <ul class="list-inline text-left footer-icons">
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="http://facebook.com/"><i class="fab fa-facebook-f fa-lg fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="https://twitter.com/"><i class="fab fa-twitter fa-lg fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="https://www.linkedin.com/"><i class="fab fa-linkedin fa-lg fa-fw"></i></a>
-                        </li>
-                    </ul>
+                  <ul class="list-inline text-left footer-icons">
+                    <li
+                      class="list-inline-item border border-light rounded-circle text-center"
+                    >
+                      <a
+                        class="text-light text-decoration-none"
+                        target="_blank"
+                        href="http://facebook.com/"
+                        ><i class="fab fa-facebook-f fa-lg fa-fw"></i
+                      ></a>
+                    </li>
+                    <li
+                      class="list-inline-item border border-light rounded-circle text-center"
+                    >
+                      <a
+                        class="text-light text-decoration-none"
+                        target="_blank"
+                        href="https://www.instagram.com/"
+                        ><i class="fab fa-instagram fa-lg fa-fw"></i
+                      ></a>
+                    </li>
+                    <li
+                      class="list-inline-item border border-light rounded-circle text-center"
+                    >
+                      <a
+                        class="text-light text-decoration-none"
+                        target="_blank"
+                        href="https://twitter.com/"
+                        ><i class="fab fa-twitter fa-lg fa-fw"></i
+                      ></a>
+                    </li>
+                    <li
+                      class="list-inline-item border border-light rounded-circle text-center"
+                    >
+                      <a
+                        class="text-light text-decoration-none"
+                        target="_blank"
+                        href="https://www.linkedin.com/"
+                        ><i class="fab fa-linkedin fa-lg fa-fw"></i
+                      ></a>
+                    </li>
+                  </ul>
                 </div>
-                <div class="col-auto">
-                    <label class="sr-only" for="subscribeEmail">Email address</label>
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control bg-dark border-light" id="subscribeEmail" placeholder="Email address">
-                        <div class="input-group-text btn-success text-light">Subscribe</div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>
-
-        <div class="w-100 bg-black py-3">
-            <div class="container">
+      
+            <div class="w-100 bg-black py-3">
+              <div class="container">
                 <div class="row pt-2">
-                    <div class="col-12">
-                        <p class="text-left text-light">
-                            Copyright &copy; 2021 Company Name 
-                            | Designed by <a rel="sponsored" href="https://templatemo.com" target="_blank">TemplateMo</a>
-                        </p>
-                    </div>
+                  <div class="col-12">
+                    
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-
-    </footer>
-    <!-- End Footer -->
+          </footer>
+          <!-- End Footer -->
 
     <!-- Start Script -->
     <script src="assets/js/jquery-1.11.0.min.js"></script>
@@ -394,10 +319,6 @@ https://templatemo.com/tm-559-zay-shop
     <script src="assets/js/menu-single.js"></script>
     <!-- End Script -->
 
-    <!-- Start Slider Script -->
-    <script src="assets/js/slick.min.js"></script>
-    
-    <!-- End Slider Script -->
 
 </body>
 

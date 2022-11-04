@@ -46,12 +46,16 @@ function signIn() {
     .then(response => response.json())
     .then((data) => {
             console.log(data.message)
-            if (data.message === "success") {
+            if (data.message === "success" && data.isAdmin === false) {
                 setCookie('token', data.token, 1)
                 location.href = 'index.html'
+            } else if(data.message === "success" && data.isAdmin === true) {
+                location.href = '../admin/admin.html'
             } else {
                 alert("error fetching return")
             }
+               
+            
         })
     .catch(error => console.log('error fetching', error));
 }

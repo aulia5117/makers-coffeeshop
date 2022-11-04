@@ -96,7 +96,7 @@ def BasicAuth() :
     if user :
         token = jwt.encode({
             'username': username_aja,
-            'passkey' :pass_cek,
+            'password' :pass_aja,
             'id' : user.user_id,
             'exp': datetime.now() + dt.timedelta(hours=24)
             },
@@ -112,7 +112,7 @@ def BasicAuth() :
 
 
 
-# Home &
+### Home &
 @app.route('/', methods=['GET'])
 def home():
     return jsonify(
@@ -140,7 +140,7 @@ def tes():
 
 
 
-# User API
+### User API
 @app.route('/login', methods=['POST'])
 # @cross_origin(origin='*',headers=['Content-Type','Authorization'], supports_credentials=True) 
 def login():
@@ -156,6 +156,7 @@ def login():
         return {
         "token" : allow[3],
         "username" : allow[0],
+        "isAdmin" : allow[1],
         "message" : "success"
     }
         # return "True"
@@ -229,7 +230,7 @@ def user_update():
         },201
 
 
-# Item API
+### Item API
 @app.route('/get_all_item', methods=['GET'])
 def get_all_item():
     get_all_item = db.engine.execute('''SELECT * FROM "item" ORDER BY nama_item''')
@@ -323,11 +324,12 @@ def add_kategori():
             "response" : "success"
         },201
 
-@app.route('/item/search_item', methods=['GET'])
+@app.route('/item/search_item', methods=['POST'])
 def search_item():
     data = request.get_json()
     inputan = data['search']
     query_item = Item.query.filter(Item.nama_item.ilike("%"+inputan+"%")).all()
+    # return jsonify("hello")
     return jsonify([
         {
         'nama_item' : item.nama_item,
@@ -378,7 +380,8 @@ def item_update(id):
         },201
 
 
-# Order API
+### Order API
+
 # @app.route('/order/add_order', methods=['POST']) # Backend Only
 # def add_order():
     # auth = BasicAuth()
@@ -442,6 +445,7 @@ def item_update(id):
     # },201
 
 @app.route('/order/add_order', methods=['POST'])
+def add_order() :
 # Format Input :
 # {
 #     "orderan" :[
@@ -450,7 +454,6 @@ def item_update(id):
 #         }
 #     ]
 # }
-def add_order() :
     auth = BasicAuth()
     if not auth :
         return jsonify("auth error")
@@ -525,14 +528,17 @@ def add_cart_order():
         query_user = User.query.filter_by(user_id=auth[0]).first()
 
         input_item = data["item_id"]
+        input_jumlah = data["jumlah_barang"]
+        kali_jumlah = int(input_jumlah)
         query_item = Item.query.filter_by(item_id=input_item).first()
+        total_harga = query_item.harga_item * kali_jumlah 
         
         cart_order = CartOrder(
             user_id = auth[0],
-            item_id = query_item.item_id,
+            item_id = input_item,
             nama_item = query_item.nama_item,
-            jumlah_barang = data['jumlah_barang'],
-            total_harga = query_item.harga_item * data['jumlah_barang']
+            jumlah_barang = input_jumlah,
+            total_harga = total_harga
         )
 
         try :
@@ -544,7 +550,97 @@ def add_cart_order():
             },401
         return {
             "response" : "success"
-        },201
+        },200
+        # return jsonify({
+        #     "user_id" : auth[0],
+        #     "item_id" : query_item.item_id,
+        #     "nama_item" : query_item.nama_item,
+        #     "jumlah_barang" : input_jumlah,
+        #     "total_harga" : total_harga
+        # }
+        # )
+
+@app.route('/order/get_cart_order', methods=['POST'])
+def get_cart_order():
+    auth = BasicAuth()
+    if not auth :
+        return jsonify("auth error")
+    else :
+        # return jsonify(auth[0])
+        # return jsonify(auth[0])
+ 
+        # data = request.get_json()
+        query_cart = CartOrder.query.filter_by(user_id=auth[0]).all()
+        # query_cart = db.engine.execute(f'''SELECT * FROM cart_order WHERE user_id = 2''')
+        # return jsonify(query_cart)
+       
+        
+        # query_cart_arr = [
+        #     {
+        #     'user_id' : item.user_id,
+        #     'item_id' : item.item_id,
+        #     'nama_item' : item.nama_item,
+        #     'jumlah_barang' : item.jumlah_barang
+        #     } for item in query_cart
+        #     ]
+
+        try :
+            #  db.engine.execute(f'''SELECT * FROM cart_order WHERE user_id = {auth[0]}''')
+             db.session.commit()
+        except :
+            return {
+                "response" : "error"
+            },401
+        return jsonify(            
+            [
+            {
+            'user_id' : item.user_id,
+            'item_id' : item.item_id,
+            'nama_item' : item.nama_item,
+            'jumlah_barang' : item.jumlah_barang,
+            'total_harga' : item.total_harga
+            } for item in query_cart
+            ]
+        ),201
+
+
+@app.route('/order/delete_cart_order', methods=['DELETE'])
+def delete_cart_order():
+    auth = BasicAuth()
+    if not auth :
+        return jsonify("auth error")
+    else :
+        data = request.get_json()
+        query_user = User.query.filter_by(user_id=auth[0]).first()
+
+        input_item = data["item_id"]
+        input_jumlah = data["jumlah_barang"]
+        kali_jumlah = int(input_jumlah)
+        query_item = Item.query.filter_by(item_id=input_item).first()
+        total_harga = query_item.harga_item * kali_jumlah 
+        
+        cart_order = CartOrder(
+            user_id = auth[0],
+            item_id = input_item,
+            nama_item = query_item.nama_item,
+            jumlah_barang = input_jumlah,
+            total_harga = total_harga
+        )
+
+        try :
+            db.session.add(cart_order)
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+            },401
+        return {
+            "response" : "success"
+        },200
+        return {
+            "val" : total_harga
+        }
+        
 
 @app.route('/order/check_order_pending/<id>', methods=['PUT'])
 def check_order_pending(id):
@@ -640,15 +736,15 @@ def cancel_order():
         },201
 
 
-# Reporting API
+### Reporting API
 @app.route('/reporting/top5_user', methods=['GET'])
 def top5_user():
-    auth = BasicAuth()
-    if auth[1] != True :
-        return {
-            "response" : "auth error"
-        }
-    else :
+    # auth = BasicAuth()
+    # if auth[1] != True :
+    #     return {
+    #         "response" : "auth error"
+    #     }
+    # else :
         # data = request.get_json()
         top5_user = db.engine.execute('''SELECT * FROM "user" ORDER BY total_pembelian DESC LIMIT 5''')
         try :
@@ -668,12 +764,12 @@ def top5_user():
 
 @app.route('/reporting/top5_item', methods=['GET'])
 def top5_item():
-    auth = BasicAuth()
-    if auth[1] != True :
-        return {
-            "response" : "auth error"
-        }
-    else :
+    # auth = BasicAuth()
+    # if auth[1] != True :
+    #     return {
+    #         "response" : "auth error"
+    #     }
+    # else :
         top5_item = db.engine.execute('''SELECT * FROM item ORDER BY jumlah_terbeli DESC LIMIT 5''')
         try :
             top5_item
@@ -688,7 +784,7 @@ def top5_item():
             'harga_item' : item.harga_item,
             'jumlah_terbeli' : item.jumlah_terbeli
             } for item in top5_item
-        ]) 
+        ]),200
 
 # @app.after_request
 # def after_request_func(response):

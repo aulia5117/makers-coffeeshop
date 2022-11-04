@@ -118,7 +118,7 @@
             </a> -->
             <a
               class="nav-icon position-relative text-decoration-none me-5"
-              href="#"
+              href="keranjang.html"
             >
               <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
               <span
@@ -129,11 +129,23 @@
               <button id="loginbutton" type="button" class="btn btn-outline-primary" onclick="movePage()">
                 Log in
               </button>
-            <a id="userprofile" class="nav-icon position-relative text-decoration-none" href="#">
+            <!-- <a id="userprofile" class="nav-icon position-relative text-decoration-none" href="#">
                         <i class="fa fa-fw fa-user text-dark mr-3 ml-3"></i>
-                        <!-- <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>  -->
+                        
                         <span>hello</span> 
-                    </a>
+            </a> -->
+            <div class="dropdown">
+              <a id="userprofile" class="dropdown-toggle nav-icon position-relative text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-fw fa-user text-dark mr-3 ml-3"></i>
+                <span>hello</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><button class="dropdown-item" type="button">Profil</button></li>
+                <li><button class="dropdown-item" type="button">Order ku</button></li>
+                <hr>
+                <li><button class="dropdown-item" type="button" onclick="logout()">Logout</button></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
