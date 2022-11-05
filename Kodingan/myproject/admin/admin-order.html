@@ -37,7 +37,7 @@
   ======================================================== -->
 </head>
 
-<body onload="">
+<body onload="adminGetAllOrder()">
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -59,7 +59,7 @@
 
       <li class="nav-item">
         <a class="nav-link " href="admin.html">
-          <i class="bi bi-grid"></i>
+          <!-- <i class="bi bi-grid"></i> -->
           <span>Dashboard</span>
         </a>
       </li>
@@ -67,7 +67,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Menu</span><i class="bi bi-chevron-down ms-auto"></i>
+          <span>Menu</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -76,27 +76,31 @@
             </a>
           </li>
           <li>
-            <a href="create-menu.html">
+            <a href="admin-create-menu.html">
               <i class="bi bi-circle"></i><span>Create New Menu</span>
             </a>
           </li>
-          <!-- <li> -->
-            <!-- <a href="components-badges.html">
-              <i class="bi bi-circle"></i><span>Update Menu & Stok</span>
-            </a> -->
-          <!-- </li> -->
-          
         </ul>
         
-      </li><!-- End Components Nav -->
+      </li>
+      <!-- End Menu Nav -->
+
       <li class="nav-item">
-        <a class="nav-link " href="order.html">
+        <a class="nav-link " href="admin-order.html">
           <!-- <i class="bi bi-grid"></i> -->
           <span>Order</span>
         </a>
       </li>
-    </ul>
+      <!-- End Order Nav -->
 
+      <li class="nav-item">
+        <a class="nav-link " href="admin-history.html">
+          <!-- <i class="bi bi-grid"></i> -->
+          <span>History</span>
+        </a>
+      </li>
+      <!-- End History Nav -->
+    </ul>
   </aside>
   <!-- End Sidebar-->
 
@@ -112,7 +116,7 @@
 
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Order Masuk</h5>
+            <h5 class="card-title">Order Masuk (Pending)</h5>
             
             <!-- Active Table -->
             <table class="table table-borderless">
@@ -127,18 +131,20 @@
                   <th scope="col">Action</th>
                 </tr>
               </thead>
-              <tbody id="item-table">
-                <th scope="row">Nomer</th>
-                <td>Nama User
-                  <span hidden>User ID</span>
-                </td>
-                <td>Order Status
-                  <span hidden>Order ID</span>
-                </td>
-                <td>Waktu Order</td>
-                <td>Jumlah Barang</td>
-                <td>Total Harga</td>
-                <td>Action</td>
+              <tbody id="order-masuk">
+                <tr>
+                  <th scope="row">Nomer</th>
+                  <td>Nama User
+                    <span hidden>User ID</span>
+                  </td>
+                  <td>Order Status
+                    <span hidden>Order ID</span>
+                  </td>
+                  <td>Waktu Order</td>
+                  <td>Jumlah Barang</td>
+                  <td>Total Harga</td>
+                  <td>Action</td>
+                </tr>
               </tbody>
             </table>
             <!-- End Tables without borders -->
@@ -148,7 +154,7 @@
 
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Top 5 Item</h5>
+            <h5 class="card-title">Order Aktif</h5>
             
             <!-- Active Table -->
             <table class="table table-borderless">

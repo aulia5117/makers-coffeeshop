@@ -69,6 +69,7 @@ function adminGetKategori() {
     .then((result) => {
       // console.log(result)
       let text = "";
+      let i = 1
       result.forEach(myFunction);
       document.getElementById("input-kategori").innerHTML = text;
        
@@ -189,8 +190,6 @@ function adminGetItemModal(id) {
 }
 
 function adminUpdateMenu() {
-  // const myHeaders = new Headers();
-  // myHeaders.append("Content-Type", "application/json");
 
   let nama_item = document.getElementById('input-nama-item').value
   let deskripsi = document.getElementById('input-deskripsi').value
@@ -209,7 +208,7 @@ function adminUpdateMenu() {
     "nama_item": nama_item,
     "deskripsi" : deskripsi,
     "harga_item" : harga_item,
-    "jumlah_item" : 20
+    "jumlah_item" : jumlah_item
   });
   
   const requestOptions = {
@@ -225,6 +224,40 @@ function adminUpdateMenu() {
     .catch(error => console.log('error', error));
 }
 
-// function adminGetAllOrder() {
-
-// }
+function adminGetAllOrder() {
+  const requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  
+  fetch("http://127.0.0.1:5000/order/get_all_order", requestOptions)
+    .then(response => response.json())
+    .then((result) => {
+        console.log(result)
+        let text = "";
+        let i = 1
+        result.forEach(myFunction);
+        document.getElementById("item-table").innerHTML = text;
+         
+        function myFunction(item) {
+          text += 
+           `<tr>
+                <th scope="row">${i}</th>
+                <td>${item.nama_user}
+                  <span hidden>User ID</span>
+                </td>
+                <td>Order Status
+                  <span hidden>Order ID</span>
+                </td>
+                <td>Waktu Order</td>
+                <td>Jumlah Barang</td>
+                <td>Total Harga</td>
+                <td>Action</td>
+            </tr>` 
+            i++
+        }
+    }
+    // console.log("a")
+    )
+    .catch(error => console.log('error', error));
+}

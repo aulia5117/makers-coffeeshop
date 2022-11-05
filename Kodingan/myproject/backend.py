@@ -229,6 +229,29 @@ def user_update():
             "response" : "success"
         },201
 
+@app.route('/user/get_update_data/<id>', methods=['GET'])
+def get_update_data(id):
+    # auth = BasicAuth()
+    # data = request.get_json()
+    
+    get_user = db.engine.execute(f'''SELECT * FROM "user" WHERE user_id = {id}''')
+
+    try :
+        db.engine.execute(f'''SELECT * FROM "user" WHERE user_id = {id}''')
+        db.session.commit()
+    except :
+        return {
+            "response" : "error"
+            },401
+    return jsonify([
+        {
+        'user_id' : user.user_id,
+        'nama_user' : user.nama_user,
+        'email_user' : user.email_user,
+        'username' : user.username
+        } for user in get_user
+    ]) 
+
 
 ### Item API
 @app.route('/get_all_item', methods=['GET'])
@@ -774,6 +797,7 @@ def get_all_order():
         {
         'order_id' : order.order_id,
         'user_id' : order.user_id,
+        'nama_user' : order.nama_user,
         'order_status' : order.order_status,
         'order_date' : order.order_date,
         'jumlah_barang' : order.jumlah_barang,
