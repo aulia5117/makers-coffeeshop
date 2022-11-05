@@ -58,7 +58,7 @@ function getTop5Item() {
         .catch(error => console.log('error', error));
 }
 
-function getKategori() {
+function adminGetKategori() {
     const requestOptions = {
     method: 'GET',
     redirect: 'follow'
@@ -69,7 +69,6 @@ function getKategori() {
     .then((result) => {
       // console.log(result)
       let text = "";
-      let i = 1
       result.forEach(myFunction);
       document.getElementById("input-kategori").innerHTML = text;
        
@@ -120,3 +119,112 @@ function postMenu() {
       })
       .catch(error => console.log('error', error));
 }
+
+function adminGetAllItem() {
+
+  const requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  
+  fetch("http://127.0.0.1:5000/get_all_item", requestOptions)
+    .then(response => response.json())
+    .then(result => {
+        // console.log(result)
+        let text = "";
+        let i = 1
+        result.forEach(myFunction);
+        document.getElementById("item-table").innerHTML = text;
+         
+        function myFunction(item) {
+          text += 
+           `<tr>
+                <th scope="row">${i}</th>
+                <span id="${item.item_id}" hidden>${item.item_id}</span>
+                <td>${item.nama_item}</td>
+                <td>IDR ${item.harga_item}</td>
+                <td>${item.kategori}</td>
+                <td>${item.jumlah_terbeli} Barang</td>
+                <td><button type="button" id="${item.item_id}" onclick="adminGetItemModal(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
+                data-bs-target="#modalUpdate">
+                Update
+                <span id="item-id" hidden>${item.item_id}</span>
+              </button></td>
+            </tr>` 
+            i++
+        }
+    })
+    .catch(error => console.log('error fetching', error));
+}
+
+function adminGetItemModal(id) {
+    // alert(id)
+
+    let idValue = id
+    // console.log(idValue)
+
+    const requestOptions = {
+      method: 'GET'
+      // redirect: 'follow'
+    };
+  
+  fetch(`http://127.0.0.1:5000/get_item/${idValue}`, requestOptions)
+    .then(response => response.json())
+    .then((result) => {
+        console.log(result)
+        item = result[0]
+        document.getElementById('input-nama-item').value = item.nama_item
+        document.getElementById('input-deskripsi').value = item.deskripsi
+        document.getElementById('input-harga-item').value = item.harga_item
+        document.getElementById('input-jumlah-item').value = item.jumlah_item
+        // console.log(item.nama_item)
+        document.getElementById("modal-nama-item").innerHTML = "Update Item - " + item.nama_item 
+        // document.getElementById("input-nama-item").setAttribute("value",item.nama_item)
+        // document.getElementById("input-deskripsi").value = item.deskripsi
+        // document.getElementById("input-harga-item").setAttribute("value",item.harga_item)
+        // document.getElementById("input-jumlah-item").setAttribute("value",item.jumlah_item)     
+          
+    })
+    .catch(error => console.log('error fetching', error));
+}
+
+function adminUpdateMenu() {
+  // const myHeaders = new Headers();
+  // myHeaders.append("Content-Type", "application/json");
+
+  let nama_item = document.getElementById('input-nama-item').value
+  let deskripsi = document.getElementById('input-deskripsi').value
+  let harga_item = document.getElementById('input-harga-item').value
+  // parseInt(harga_item)
+  let jumlah_item = document.getElementById('input-jumlah-item').value
+  // parseInt(jumlah_item)
+  console.log(harga_item,jumlah_item)
+  let id = document.getElementById('item-id').innerHTML
+  console.log(id)
+  
+  let myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  
+  const raw = JSON.stringify({
+    "nama_item": nama_item,
+    "deskripsi" : deskripsi,
+    "harga_item" : harga_item,
+    "jumlah_item" : 20
+  });
+  
+  const requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+  
+  fetch(`http://127.0.0.1:5000/item/update_item/${id}`, requestOptions)
+    .then(response => response.json())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+}
+
+// function adminGetAllOrder() {
+
+// }

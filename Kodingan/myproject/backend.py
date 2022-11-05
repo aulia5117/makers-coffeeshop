@@ -233,9 +233,9 @@ def user_update():
 ### Item API
 @app.route('/get_all_item', methods=['GET'])
 def get_all_item():
-    get_all_item = db.engine.execute('''SELECT * FROM "item" ORDER BY nama_item''')
+    get_all_item = db.engine.execute('''SELECT * FROM "item" INNER JOIN "kategori" ON item.kategori_id=kategori.kategori_id ORDER BY item_id''')
     try :
-        db.engine.execute('''SELECT * FROM "item" ORDER BY nama_item''')
+        db.engine.execute('''SELECT * FROM "item" ORDER BY item_id''')
         db.session.commit()
     except :
         return {
@@ -248,7 +248,9 @@ def get_all_item():
         'deskripsi' : item.deskripsi,
         'harga_item' : item.harga_item,
         'jumlah_item' : item.jumlah_item,
-        'kategori' : item.kategori_id
+        'jumlah_terbeli' : item.jumlah_terbeli,
+        'kategori_id' : item.kategori_id,
+        'kategori' : item.nama_kategori
         } for item in get_all_item
     ])
 
@@ -359,12 +361,12 @@ def search_item():
 
 @app.route('/item/update_item/<id>', methods=['PUT'])
 def item_update(id):
-    auth = BasicAuth()
-    if auth[1] != True :
-        return {
-            "response" : "auth error"
-        }
-    else :
+    # auth = BasicAuth()
+    # if auth[1] != True :
+    #     return {
+    #         "response" : "auth error"
+    #     }
+    # else :
         data = request.get_json()
 
         if 'nama_item' not in data and 'deskripsi' not in data and 'harga_item' not in data and 'jumlah_item' not in data and 'jumlah_terbeli' not in data :
@@ -381,20 +383,24 @@ def item_update(id):
             item.deskripsi = data['deskripsi']
 
         if 'harga_item' in data :
+            # harga_item = int(data['harga_item'])
             item.harga_item = data['harga_item']
         
         if 'jumlah_item' in data :
+            # jumlah_item = int(data['jumlah_item'])
             item.jumlah_item = data['jumlah_item']
+        
+        db.session.commit()
 
-        try :
-            db.session.commit()
-        except :
-            return {
-                "response" : "error"
-            },401
+        # try :
+        #     db.session.commit()
+        # except :
+        #     return {
+        #         "response" : "error"
+        #     },401
         return {
             "response" : "success"
-        },201
+        },200
 
 
 ### Order API
@@ -620,7 +626,6 @@ def get_cart_order():
             ]
         ),201
 
-
 @app.route('/order/delete_cart_order', methods=['DELETE'])
 def delete_cart_order():
     auth = BasicAuth()
@@ -658,7 +663,6 @@ def delete_cart_order():
             "val" : total_harga
         }
         
-
 @app.route('/order/check_order_pending/<id>', methods=['PUT'])
 def check_order_pending(id):
     auth = BasicAuth()
@@ -751,6 +755,31 @@ def cancel_order():
     return {
         "response" : "success"
         },201
+
+@app.route('/order/get_all_order', methods=['GET'])
+def get_all_order():
+    get_all_order = db.engine.execute('''SELECT * FROM "order" 
+    INNER JOIN "orderdetail" ON "order".order_id=orderdetail.order_id 
+    INNER JOIN "user" ON "order".user_id="user".user_id ORDER BY "user".nama_user''')
+    try :
+        db.engine.execute('''SELECT * FROM "order" 
+        INNER JOIN "orderdetail" ON "order".order_id=orderdetail.order_id 
+        INNER JOIN "user" ON "order".user_id="user".user_id ORDER BY "user".nama_user''')
+        db.session.commit()
+    except :
+        return {
+            "response" : "error"
+            },401
+    return jsonify([
+        {
+        'order_id' : order.order_id,
+        'user_id' : order.user_id,
+        'order_status' : order.order_status,
+        'order_date' : order.order_date,
+        'jumlah_barang' : order.jumlah_barang,
+        'total_harga' : order.total_harga
+        } for order in get_all_order
+    ])
 
 
 ### Reporting API

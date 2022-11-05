@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Qofi Admin - Create Menu</title>
+  <title>Qofi Admin</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -37,7 +37,7 @@
   ======================================================== -->
 </head>
 
-<body onload="adminGetKategori()">
+<body onload="adminGetAllItem()">
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -70,7 +70,7 @@
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="admin-all-menu.html">
+            <a href="components-alerts.html">
               <i class="bi bi-circle"></i><span>All Menu</span>
             </a>
           </li>
@@ -79,11 +79,11 @@
               <i class="bi bi-circle"></i><span>Create New Menu</span>
             </a>
           </li>
-          <!-- <li>
-            <a href="components-badges.html">
+          <!-- <li> -->
+            <!-- <a href="components-badges.html">
               <i class="bi bi-circle"></i><span>Update Menu & Stok</span>
-            </a>
-          </li> -->
+            </a> -->
+          <!-- </li> -->
           
         </ul>
       </li><!-- End Components Nav -->
@@ -93,10 +93,10 @@
   </aside>
   <!-- End Sidebar-->
 
-  <!-- ======= Content ======= -->
   <main id="main" class="main">
+
     <div class="pagetitle">
-      <h1>Create Menu</h1>
+      <h1>All Item List</h1>
     </div>
     <!-- End Page Title -->
 
@@ -106,46 +106,77 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title"></h5>
+            
+            <!-- Active Table -->
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nama</th>
+                  <th scope="col">Harga Per Satuan</th>
+                  <th scope="col">Kategori</th>
+                  <th scope="col">Total Terbeli</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody id="item-table">
+                <th scope="row">Nomer</th>
+                <td>Nama Item</td>
+                <td>Harga Per Satuan</td>
+                <td>Kategori</td>
+                <td>Total Terbeli</td>
+                <td>Action</td>
+              </tbody>
+            </table>
+            <!-- End Tables without borders -->
 
-            <!-- Start Form -->
-            <!-- <form action="" class="row g-3"> -->
-              <div class="col-12">
-                <label for="input-nama-item" class="form-label">Nama Item</label>
-                <input type="text" class="form-control" id="input-nama-item">
+            <!-- Start Modal Update -->
+            <section id="modal-section">
+              <div class="modal fade" id="modalUpdate" tabindex="-1" aria-labelledby="modalUpdate" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modal-nama-item">Update Item - Nama Item</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="card-body">
+                        <h5 class="card-title"></h5>
+  
+                          <div class="col-12">
+                            <label for="input-nama-item" class="form-label">Nama Item</label>
+                            <input type="text" class="form-control" id="input-nama-item">
+                          </div>
+                          <div class="col-12">
+                            <label for="input-deskripsi" class="form-label">Deskripsi</label>
+                            <textarea name="input-deskripsi" class="form-control" id="input-deskripsi"></textarea>
+                          </div>
+                          <div class="col-12">
+                            <label for="input-harga-item" class="form-label">Harga Item (IDR)</label>
+                            <input type="number" class="form-control" id="input-harga-item" min="1000"  step="1000">
+                          </div>
+                          <div class="col-12">
+                            <label for="input-jumlah-item" class="form-label">Jumlah Item</label>
+                            <input type="number" class="form-control" id="input-jumlah-item">
+                          </div>
+                      </div>
+                    <div class="text-center">
+                      <button onclick="adminUpdateMenu()" class="btn btn-primary">Update</button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="col-12">
-                <label for="input-deskripsi" class="form-label">Deskripsi</label>
-                <textarea name="input-deskripsi" class="form-control" id="input-deskripsi"></textarea>
-              </div>
-              <div class="col-12">
-                <label for="input-harga-item" class="form-label">Harga Item (IDR)</label>
-                <input type="number" class="form-control" id="input-harga-item" min="1000" value="1000" step="1000">
-              </div>
-              <div class="col-12">
-                <label for="input-jumlah-item" class="form-label">Jumlah Item</label>
-                <input type="number" class="form-control" id="input-jumlah-item" min="1" value="1">
-              </div>
-              <div class="col-12 my-3 dropdown">
-                <label for="input-kategori" class="form-label">Kategori</label>
-                <select id="input-kategori" name="input-kategori">
-                  <option value="id">Kategori</option>
-                </select> 
-              </div>
-              <div class="text-center">
-                <button onclick="postMenu()" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-secondary">Reset</button>
-              </div>
-            <!-- </form> -->
-            <!-- End Form -->
+          </section>
+            <!-- End Modal Update -->
 
           </div>
         </div>
 
+        
       </div>
     </section>
 
-  </main>
-  <!-- End #main -->
+  </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">

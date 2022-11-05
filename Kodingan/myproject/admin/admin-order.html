@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Qofi Admin - Create Menu</title>
+  <title>Qofi Admin - Order</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -37,7 +37,7 @@
   ======================================================== -->
 </head>
 
-<body onload="adminGetKategori()">
+<body onload="">
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -62,7 +62,8 @@
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
-      </li><!-- End Dashboard Nav -->
+      </li>
+      <!-- End Dashboard Nav -->
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
@@ -79,24 +80,30 @@
               <i class="bi bi-circle"></i><span>Create New Menu</span>
             </a>
           </li>
-          <!-- <li>
-            <a href="components-badges.html">
+          <!-- <li> -->
+            <!-- <a href="components-badges.html">
               <i class="bi bi-circle"></i><span>Update Menu & Stok</span>
-            </a>
-          </li> -->
+            </a> -->
+          <!-- </li> -->
           
         </ul>
+        
       </li><!-- End Components Nav -->
-
+      <li class="nav-item">
+        <a class="nav-link " href="order.html">
+          <!-- <i class="bi bi-grid"></i> -->
+          <span>Order</span>
+        </a>
+      </li>
     </ul>
 
   </aside>
   <!-- End Sidebar-->
 
-  <!-- ======= Content ======= -->
   <main id="main" class="main">
+
     <div class="pagetitle">
-      <h1>Create Menu</h1>
+      <h1>Order</h1>
     </div>
     <!-- End Page Title -->
 
@@ -105,38 +112,64 @@
 
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title"></h5>
+            <h5 class="card-title">Order Masuk</h5>
+            
+            <!-- Active Table -->
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nama User</th>
+                  <th scope="col">Order Status</th>
+                  <th scope="col">Waktu Order</th>
+                  <th scope="col">Jumlah Barang</th>
+                  <th scope="col">Total Harga</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody id="item-table">
+                <th scope="row">Nomer</th>
+                <td>Nama User
+                  <span hidden>User ID</span>
+                </td>
+                <td>Order Status
+                  <span hidden>Order ID</span>
+                </td>
+                <td>Waktu Order</td>
+                <td>Jumlah Barang</td>
+                <td>Total Harga</td>
+                <td>Action</td>
+              </tbody>
+            </table>
+            <!-- End Tables without borders -->
 
-            <!-- Start Form -->
-            <!-- <form action="" class="row g-3"> -->
-              <div class="col-12">
-                <label for="input-nama-item" class="form-label">Nama Item</label>
-                <input type="text" class="form-control" id="input-nama-item">
-              </div>
-              <div class="col-12">
-                <label for="input-deskripsi" class="form-label">Deskripsi</label>
-                <textarea name="input-deskripsi" class="form-control" id="input-deskripsi"></textarea>
-              </div>
-              <div class="col-12">
-                <label for="input-harga-item" class="form-label">Harga Item (IDR)</label>
-                <input type="number" class="form-control" id="input-harga-item" min="1000" value="1000" step="1000">
-              </div>
-              <div class="col-12">
-                <label for="input-jumlah-item" class="form-label">Jumlah Item</label>
-                <input type="number" class="form-control" id="input-jumlah-item" min="1" value="1">
-              </div>
-              <div class="col-12 my-3 dropdown">
-                <label for="input-kategori" class="form-label">Kategori</label>
-                <select id="input-kategori" name="input-kategori">
-                  <option value="id">Kategori</option>
-                </select> 
-              </div>
-              <div class="text-center">
-                <button onclick="postMenu()" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-secondary">Reset</button>
-              </div>
-            <!-- </form> -->
-            <!-- End Form -->
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Top 5 Item</h5>
+            
+            <!-- Active Table -->
+            <table class="table table-borderless">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nama Item</th>
+                  <th scope="col">Harga Item (Satuan)</th>
+                  <th scope="col">Jumlah Terbeli</th>
+                </tr>
+              </thead>
+              <tbody id="top-5-item">
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Nama Item</td>
+                  <td>Harga Item (Satuan)</td>
+                  <td>Jumlah Terbeli</td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- End Tables without borders -->
 
           </div>
         </div>
@@ -144,8 +177,7 @@
       </div>
     </section>
 
-  </main>
-  <!-- End #main -->
+  </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
