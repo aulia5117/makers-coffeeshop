@@ -552,9 +552,12 @@ def add_order() :
         query_order_2.total_harga = kalkulasi_total
         query_order_2.jumlah_barang = kalkulasi_barang
 
+        delete_cart = db.engine.execute(f'''DELETE FROM cart_order WHERE user_id={auth[0]}''')
+
         try :
             db.session.add(order)
             db.session.commit()
+            delete_cart
         except :
             return {
                 "response" : "error"
@@ -617,9 +620,9 @@ def get_cart_order():
  
         # data = request.get_json()
         query_cart = CartOrder.query.filter_by(user_id=auth[0]).all()
+        cart_total = db.engine.execute(f'''SELECT SUM(total_harga) FROM cart_order WHERE user_id={auth[0]}''')
         # query_cart = db.engine.execute(f'''SELECT * FROM cart_order WHERE user_id = 2''')
         # return jsonify(query_cart)
-       
         
         # query_cart_arr = [
         #     {
@@ -630,6 +633,11 @@ def get_cart_order():
         #     } for item in query_cart
         #     ]
 
+        result = [list(row) for row in cart_total]
+        results = result[0][0]
+        # results_dict = {'results': results}
+        # return jsonify(results_dict)
+
         try :
             #  db.engine.execute(f'''SELECT * FROM cart_order WHERE user_id = {auth[0]}''')
              db.session.commit()
@@ -637,17 +645,16 @@ def get_cart_order():
             return {
                 "response" : "error"
             },401
-        return jsonify(            
-            [
+        return [
             {
             'user_id' : item.user_id,
             'item_id' : item.item_id,
             'nama_item' : item.nama_item,
             'jumlah_barang' : item.jumlah_barang,
-            'total_harga' : item.total_harga
+            'total_harga' : item.total_harga,
+            'cart_total' : results
             } for item in query_cart
-            ]
-        ),201
+            ],201
 
 @app.route('/order/delete_cart_order', methods=['DELETE'])
 def delete_cart_order():
@@ -779,31 +786,57 @@ def cancel_order():
         "response" : "success"
         },201
 
-@app.route('/order/get_all_order', methods=['GET'])
-def get_all_order():
-    get_all_order = db.engine.execute('''SELECT * FROM "order" 
-    INNER JOIN "orderdetail" ON "order".order_id=orderdetail.order_id 
-    INNER JOIN "user" ON "order".user_id="user".user_id ORDER BY "user".nama_user''')
-    try :
-        db.engine.execute('''SELECT * FROM "order" 
-        INNER JOIN "orderdetail" ON "order".order_id=orderdetail.order_id 
-        INNER JOIN "user" ON "order".user_id="user".user_id ORDER BY "user".nama_user''')
-        db.session.commit()
-    except :
-        return {
-            "response" : "error"
-            },401
-    return jsonify([
-        {
-        'order_id' : order.order_id,
-        'user_id' : order.user_id,
-        'nama_user' : order.nama_user,
-        'order_status' : order.order_status,
-        'order_date' : order.order_date,
-        'jumlah_barang' : order.jumlah_barang,
-        'total_harga' : order.total_harga
-        } for order in get_all_order
-    ])
+# @app.route('/order/get_all_order', methods=['GET'])
+# def get_all_order():
+#     get_all_order = db.engine.execute('''SELECT * FROM "order" 
+#     INNER JOIN "orderdetail" ON "order".order_id=orderdetail.order_id 
+#     INNER JOIN "user" ON "order".user_id="user".user_id ORDER BY "user".nama_user''')
+#     try :
+#         db.engine.execute('''SELECT * FROM "order" 
+#         INNER JOIN "orderdetail" ON "order".order_id=orderdetail.order_id 
+#         INNER JOIN "user" ON "order".user_id="user".user_id ORDER BY "user".nama_user''')
+#         db.session.commit()
+#     except :
+#         return {
+#             "response" : "error"
+#             },401
+#     return jsonify([
+#         {
+#         'order_id' : order.order_id,
+#         'user_id' : order.user_id,
+#         'nama_user' : order.nama_user,
+#         'order_status' : order.order_status,
+#         'order_date' : order.order_date,
+#         'jumlah_barang' : order.jumlah_barang,
+#         'total_harga' : order.total_harga
+#         } for order in get_all_order
+#     ])
+
+@app.route('/order/get_order/<id>', methods=['GET'])
+def get_order(id):
+    # auth = BasicAuth()
+    # if not auth :
+    #     return jsonify("auth error")
+    # else :
+        get_order = db.engine.execute(f'''SELECT * FROM "order" INNER JOIN "user" ON "order".user_id = "user".user_id WHERE "order".user_id = {id}''')
+        try :
+            db.engine.execute(f'''SELECT * FROM "order" INNER JOIN "user" ON "order".user_id = "user".user_id WHERE "order".user_id = {id}''')
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+                },401
+        return jsonify([
+            {
+            'order_id' : order.order_id,
+            'user_id' : order.user_id,
+            'nama_user' : order.nama_user,
+            'order_status' : order.order_status,
+            'order_date' : order.order_date,
+            'jumlah_barang' : order.jumlah_barang,
+            'total_harga' : order.total_harga
+            } for order in get_order
+        ])
 
 
 ### Reporting API

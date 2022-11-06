@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Qofi - Your Order</title>
+  <title>Qofi - Order History</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -37,7 +37,7 @@
   ======================================================== -->
 </head>
 
-<body onload="userGetExistingOrder();">
+<body onload="userGetOrderHistory();">
 
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
@@ -93,7 +93,7 @@
     <!-- End Order Nav -->
 
     <li class="nav-item">
-      <a class="nav-link " href="user-order-history.html">
+      <a class="nav-link " href="admin-history.html">
         <!-- <i class="bi bi-grid"></i> -->
         <span>Order History</span>
       </a>
@@ -107,7 +107,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Order</h1>
+      <h1>History</h1>
     </div>
     <!-- End Page Title -->
 
@@ -116,7 +116,6 @@
 
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Order Pending</h5>
             
             <!-- Active Table -->
             <table class="table table-borderless">
@@ -124,22 +123,15 @@
                 <tr>
                   <th scope="col">#</th>
                   <!-- <th scope="col">Nama User</th> -->
-                  <th scope="col">Order Status</th>
                   <th scope="col">Waktu Order</th>
                   <th scope="col">Total Barang</th>
                   <th scope="col">Total Harga</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
-              <tbody id="order-pending">
+              <tbody id="order-history">
                 <tr>
                   <th scope="row">Nomer</th>
-                  <td>Nama User
-                    <span hidden>User ID</span>
-                  </td>
-                  <td>Order Status
-                    <span hidden>Order ID</span>
-                  </td>
                   <td>Waktu Order</td>
                   <td>Jumlah Barang</td>
                   <td>Total Harga</td>
@@ -152,43 +144,7 @@
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Order Aktif</h5>
-            
-            <!-- Active Table -->
-            <table class="table table-borderless">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <!-- <th scope="col">Nama User</th> -->
-                  <th scope="col">Order Status</th>
-                  <th scope="col">Waktu Order</th>
-                  <th scope="col">Jumlah Barang</th>
-                  <th scope="col">Total Harga</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody id="order-aktif">
-                <tr>
-                  <th scope="row">Nomer</th>
-                  <td>Nama User
-                    <span hidden>User ID</span>
-                  </td>
-                  <td>Order Status
-                    <span hidden>Order ID</span>
-                  </td>
-                  <td>Waktu Order</td>
-                  <td>Jumlah Barang</td>
-                  <td>Total Harga</td>
-                  <td>Action</td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- End Tables without borders -->
-
-          </div>
-        </div>
+        
 
       </div>
     </section>

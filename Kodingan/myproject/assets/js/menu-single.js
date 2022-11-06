@@ -1,8 +1,8 @@
 function getItemById() {
 
     let linkURL = String(location.search)
-    sliceUjung = linkURL.split("=")
-    valueUjung = sliceUjung[1]
+    let sliceUjung = linkURL.split("=")
+    let valueUjung = sliceUjung[1]
 
     const requestOptions = {
         method: 'GET'

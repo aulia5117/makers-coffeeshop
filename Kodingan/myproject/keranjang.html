@@ -89,12 +89,12 @@
                       </div>
                     </div>
                   </div>
-                  <a
+                  <a 
                     class="nav-icon position-relative text-decoration-none me-5"
                     href="#"
                   >
                     <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                    <span
+                    <span id="cart-count"
                       class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"
                       >0</span
                     >
@@ -155,6 +155,9 @@
                     <div class="card p-3" style="position:fixed;">
                         <h2 class="m-auto">Ringkasan Belanja</h2>
                         <hr>
+                        <h6>Total Cart :</h6>
+                        <h5 id="total-cart"></h5>
+                        <button onclick="addOrder()" class="btn btn-primary">Beli</button>
                     </div>
                 </div>
                 <!-- col ringkasan end -->
