@@ -37,27 +37,33 @@ function getKeranjang() {
             console.log(item)
             text += 
                       `<ul>
-                      <div class="card row" id="item${i}">
+                      <div id="item${i}" class="card mb-3">
+                        <div class="row g-0">
                           <div class="card-header">
-                              <h6 class="col-lg-7">Item ${i}</h6>
-                              <div  style="text-align: right;">
-                              <button type="button" class="btn btn-danger ">Delete</button>
-                              </div>    
+                            <h5>Item ${i}</h5>
                           </div>
+                          <div class="col-md-4">
+                            <img src="assets/img/coffee-child-sample.jpg" class="img-fluid" height="50%" alt="...">
+                          </div>
+                          
+                        <div class="col-md-8">
                           <div class="card-body">
-                              <div>
-                                  <img src="assets/img/coffee-child-sample.jpg" class="img-thumbnail" width="200px" height="200px">
-                              </div>
-                              <div>
-                                  <h5 id="card-nama-item${item}" class="card-title">${item.nama_item}</h5>
-                                  <h6 id="card-harga-item${item.item_id}" class="card-title">${item.total_harga}  
-                                  
-                                  </h6>
-                                  <input id="item-quantity" type="number" value="${item.jumlah_barang}" min="1"/> Barang
-                              </div>
+                            <h5 id="card-nama-item${item.item_id}" class="card-title">${item.nama_item}</h5>
+                            <div>
+                              <h6 id="card-harga-item{item.item_id}" class="card-title"> IDR ${item.total_harga}</h6>
+                              <h6>${item.jumlah_barang} Barang</h6>  
+                               
+                            </div>
+                            <div class="text-end">
+                              <button id="${item.item_id}" class="btn btn-danger">Delete</button>
+                            </div>
+                              
+                            </div>
                           </div>
                         </div>
-                        </ul>` 
+                      </div>
+                    </ul>` 
+                        
                 i++
               }
 

@@ -43,15 +43,34 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="../user/user-profile.html" class="logo d-flex align-items-center">
         <img src="../assets/img/coffee-beans-logo.ico" alt="">
         <span class="d-none d-lg-block">User Dashboard</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
+        <nav class="header-nav mx-auto">
+          <div class="nav-item">
+            <a class="nav-link" href="/index.html">Home</a>
+          </div>
+        </nav>
+        <nav class="header-nav mx-auto">
+          <div class="nav-item">
+            <a class="nav-link" href="/menu.html">Menu</a>
+          </div>
+        </nav>
+        <nav class="header-nav mx-auto">
+          <div class="nav-item">
+            <a class="nav-link" href="/news.html">News</a>
+          </div>
+        </nav>
+          
+          
+        
+   
     <nav class="header-nav ms-auto">
-
+          
           <div class="dropdown me-3">
             <a id="userprofile" class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
               
@@ -59,14 +78,15 @@
             </a>
             <ul class="dropdown-menu">
               <li><button class="dropdown-item" type="button" onclick="location.href='user-profile.html'">Profil</button></li>
-              <li><button class="dropdown-item" type="button">Order ku</button></li>
+              <li><button class="dropdown-item" type="button" onclick="location.href='user-active-order.html'">Order ku</button></li>
               <hr>
-              <li><button class="dropdown-item" type="button" onclick="logout()">Logout</button></li>
+              <li><button class="dropdown-item" type="button" onclick="userLogout()">Logout</button></li>
             </ul>
           </div>
           <!-- End Profile -->
-
+            
     </nav>
+    
 
   </header><!-- End Header -->
 
@@ -78,7 +98,7 @@
       <li class="nav-item">
         <a class="nav-link " href="user-profile.html">
           <!-- <i class="bi bi-grid"></i> -->
-          <span>Qofi - Profile</span>
+          <span>Profile</span>
         </a>
       </li>
       <!-- End Profile Nav -->
@@ -134,7 +154,7 @@
 
               <div class="text-center mt-3">
                 <button onclick="userUpdateUser()" class="btn btn-info">Update</button>
-                <button type="reset" class="btn btn-secondary">Reset</button>
+                
               </div>
             <!-- </form> -->
             <!-- End Form -->

@@ -67,17 +67,17 @@ function register() {
     let password = document.getElementById("registerPassword").value;
     console.log(name,email,username,password);
 
-    var myHeaders = new Headers();
+    const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
+    const raw = JSON.stringify({
     "nama_user": name,
     "email_user": email,
     "username": username,
     "password": password
     });
 
-    var requestOptions = {
+    const requestOptions = {
     method: 'POST',
     headers: myHeaders,
     body: raw,

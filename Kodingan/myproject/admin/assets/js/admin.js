@@ -1,3 +1,9 @@
+function adminLogout() {
+  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  location.href = "../login.html"
+}
+
+// Admin.html
 function getTop5User() {
     
     const requestOptions = {
@@ -146,7 +152,7 @@ function adminGetAllItem() {
                 <td>IDR ${item.harga_item}</td>
                 <td>${item.kategori}</td>
                 <td>${item.jumlah_terbeli} Barang</td>
-                <td><button type="button" id="${item.item_id}" onclick="adminGetItemModal(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
+                <td><button type="button" id="${item.item_id}" onclick="adminGetItemModal(this.id)" class="btn btn-warning btn-sm me-1" data-bs-toggle="modal"
                 data-bs-target="#modalUpdate">
                 Update
                 <span id="item-id" hidden>${item.item_id}</span>
@@ -163,7 +169,6 @@ function adminGetItemModal(id) {
 
     let idValue = id
     // console.log(idValue)
-
     const requestOptions = {
       method: 'GET'
       // redirect: 'follow'
@@ -233,31 +238,166 @@ function adminGetAllOrder() {
   fetch("http://127.0.0.1:5000/order/get_all_order", requestOptions)
     .then(response => response.json())
     .then((result) => {
-        console.log(result)
-        let text = "";
+        // console.log(result)
+        let order_masuk = "";
+        let order_aktif = "";
         let i = 1
+        let j = 1
         result.forEach(myFunction);
-        document.getElementById("item-table").innerHTML = text;
+        document.getElementById("order-masuk").innerHTML = order_masuk;
+        document.getElementById("order-aktif").innerHTML = order_aktif;
+
          
         function myFunction(item) {
-          text += 
+          if (item.order_status === 'pending') {
+            order_masuk += 
            `<tr>
                 <th scope="row">${i}</th>
                 <td>${item.nama_user}
-                  <span hidden>User ID</span>
+                  <span hidden>${item.user_id}</span>
                 </td>
-                <td>Order Status
-                  <span hidden>Order ID</span>
+                <td>${item.order_status}
+                  <span hidden>${item.order_id}</span>
                 </td>
-                <td>Waktu Order</td>
-                <td>Jumlah Barang</td>
-                <td>Total Harga</td>
-                <td>Action</td>
+                <td>${item.order_date}</td>
+                <td>${item.jumlah_barang} Barang</td>
+                <td>IDR ${item.total_harga}</td>
+                <td>
+                  <button type="button" id="${item.order_id}" onclick="getOrderDetail(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
+                  data-bs-target="#modalOrderDetail">
+                  Detail
+                  <span id="item-id" hidden>${item.item_id}</span>
+
+                  <button type="button" id="${item.order_id}" onclick="adminAcceptPending(this.id)" class="btn btn-success btn-sm me-1">
+                  Accept
+                  <span id="item-id" hidden>${item.item_id}</span>
+
+                  <button type="button" id="${item.order_id}" onclick="cancelOrder(this.id)" class="btn btn-danger btn-sm me-1">
+                  Cancel
+                  <span id="item-id" hidden>${item.item_id}</span>
+                </td>
             </tr>` 
             i++
+          } else if(item.order_status === 'activate') {
+            order_aktif += 
+           `<tr>
+                <th scope="row">${j}</th>
+                <td>${item.nama_user}
+                  <span hidden>${item.user_id}</span>
+                </td>
+                <td>${item.order_status}
+                  <span hidden>${item.order_id}</span>
+                </td>
+                <td>${item.order_date}</td>
+                <td>${item.jumlah_barang} Barang</td>
+                <td>IDR ${item.total_harga}</td>
+                <td>
+                  <button type="button" id="${item.order_id}" onclick="getOrderDetail(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
+                  data-bs-target="#modalOrderDetail">
+                  Detail
+                  <span id="item-id" hidden>${item.item_id}</span>
+
+                  <button type="button" id="${item.order_id}" onclick="adminFinishOrder(this.id)" class="btn btn-success btn-sm me-1">
+                  Finish
+                  <span id="item-id" hidden>${item.item_id}</span>
+
+                  <button type="button" id="${item.order_id}" onclick="cancelOrder(this.id)" class="btn btn-danger btn-sm me-1">
+                  Cancel
+                  <span id="item-id" hidden>${item.item_id}</span>
+                </td>
+            </tr>` 
+            j++
+          } 
         }
     }
     // console.log("a")
     )
     .catch(error => console.log('error', error));
+}
+
+function adminGetAllCompletedOrder() {
+  const requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  
+  fetch("http://127.0.0.1:5000/order/get_all_order", requestOptions)
+    .then(response => response.json())
+    .then((result) => {
+        // console.log(result)
+        let order_selesai = ""
+        let i = 1
+        result.forEach(myFunction);
+
+        document.getElementById("order-selesai").innerHTML = order_selesai;
+         
+        function myFunction(item) {
+          if(item.order_status === 'completed') {
+            
+            order_selesai += 
+                `<tr>
+                      <th scope="row">${i}</th>
+                      <td>${item.nama_user}
+                        <span hidden>${item.user_id}</span>
+                      </td>
+                      <td>${item.order_status}
+                        <span hidden>${item.order_id}</span>
+                      </td>
+                      <td>${item.order_date}</td>
+                      <td>${item.jumlah_barang} Barang</td>
+                      <td>IDR ${item.total_harga}</td>
+                      <td>
+                        <button type="button" id="${item.order_id}" onclick="getOrderDetail(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
+                        data-bs-target="#modalOrderDetail">
+                        Detail
+                        <span id="item-id" hidden>${item.item_id}</span>
+                      </td>
+                  </tr>` 
+            i++
+          }
+        }
+    }
+    // console.log("a")
+    )
+    .catch(error => console.log('error', error));
+}
+
+function adminAcceptPending(id) {
+    
+    const requestOptions = {
+      method: 'PUT',
+      // headers: myHeaders,
+      redirect: 'follow'
+    };
+    
+    fetch(`http://127.0.0.1:5000/order/check_order_pending/${id}`, requestOptions)
+      .then(response => response.json())
+      .then((result) => 
+      {
+        console.log(result)
+        alert(`Order Diterima`)
+        location.reload()
+      
+      })
+      .catch(error => console.log('error', error));
+}
+
+function adminFinishOrder(id) {
+      
+      const requestOptions = {
+        method: 'PUT',
+        // headers: myHeaders,
+        redirect: 'follow'
+      };
+      
+      fetch(`http://127.0.0.1:5000/order/check_order_activate/${id}`, requestOptions)
+        .then(response => response.json())
+        .then((result) => 
+        {
+          console.log(result)
+          alert(`Order Diselesaikan`)
+          location.reload()
+        
+        })
+        .catch(error => console.log('error', error));
 }

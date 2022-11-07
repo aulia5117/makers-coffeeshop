@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Qofi Admin - Order</title>
+  <title>Qofi Admin - All Order History</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -37,7 +37,33 @@
   ======================================================== -->
 </head>
 
-<body onload="">
+<body onload="adminGetAllCompletedOrder()">
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="admin.html" class="logo d-flex align-items-center">
+        <img src="../assets/img/coffee-beans-logo.ico" alt="">
+        <span class="d-none d-lg-block">Qofi Admin</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+    <nav class="header-nav ms-auto">
+
+      <div class="dropdown me-5">
+        <a id="userprofile" class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          
+          <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><button class="dropdown-item" type="button" onclick="adminLogout()">Logout</button></li>
+        </ul>
+      </div>
+      <!-- End Profile -->
+  </nav>
+
+  </header><!-- End Header -->
 
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
@@ -94,7 +120,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Order</h1>
+      <h1>History</h1>
     </div>
     <!-- End Page Title -->
 
@@ -103,7 +129,7 @@
 
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Order Masuk</h5>
+            <h5 class="card-title">All Completed Order History</h5>
             
             <!-- Active Table -->
             <table class="table table-borderless">
@@ -118,7 +144,7 @@
                   <th scope="col">Action</th>
                 </tr>
               </thead>
-              <tbody id="item-table">
+              <tbody id="order-selesai">
                 <th scope="row">Nomer</th>
                 <td>Nama User
                   <span hidden>User ID</span>
@@ -129,7 +155,7 @@
                 <td>Waktu Order</td>
                 <td>Jumlah Barang</td>
                 <td>Total Harga</td>
-                <td>Action</td>
+                <!-- <td>Action</td> -->
               </tbody>
             </table>
             <!-- End Tables without borders -->
@@ -137,38 +163,61 @@
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Top 5 Item</h5>
-            
-            <!-- Active Table -->
-            <table class="table table-borderless">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Nama Item</th>
-                  <th scope="col">Harga Item (Satuan)</th>
-                  <th scope="col">Jumlah Terbeli</th>
-                </tr>
-              </thead>
-              <tbody id="top-5-item">
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Nama Item</td>
-                  <td>Harga Item (Satuan)</td>
-                  <td>Jumlah Terbeli</td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- End Tables without borders -->
-
-          </div>
-        </div>
+        
 
       </div>
     </section>
 
   </main><!-- End #main -->
+
+  <!-- Start Order Detail Modal -->
+  <section id="modal-section">
+    <div class="modal modal-xl fade" id="modalOrderDetail" tabindex="-1" aria-labelledby="modalOrderDetail" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-nama-item">Detail</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="card-body">
+              <div class="card">
+                <div class="card-body">
+                  <!-- <h5 class="card-title">Nomer Item Sekian</h5> -->
+                  
+                  <!-- Modal Table -->
+                  <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <!-- <th scope="col">Nama User</th> -->
+                        <th scope="col">Nama Item</th>
+                        <!-- <th scope="col">Waktu Order</th> -->
+                        <th scope="col">Jumlah Sub-Barang</th>
+                        <th scope="col">Sub-Total Harga</th>
+                        <!-- <th scope="col">Action</th> -->
+                      </tr>
+                    </thead>
+                    <tbody id="modal-order-detail">
+                      <tr>
+                        <th scope="row">Nomer</th>
+                        <td>Nama Item</td>
+                        <td>Jumlah Sub-Barang</td>
+                        <td>Sub-Total Harga</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- End Tables without borders -->
+      
+                </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+</section>
+<!-- End Order Detail Modal -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
@@ -199,6 +248,7 @@
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
   <script src="../admin/assets/js/admin.js"></script>
+  <script src="../assets/js/custom.js"></script>
 
 </body>
 

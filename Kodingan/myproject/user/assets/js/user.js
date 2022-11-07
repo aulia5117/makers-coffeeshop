@@ -1,3 +1,6 @@
+
+// User Control Code
+
 function userCheckCookie() {
     const token = document.cookie;
     // console.log(token);
@@ -90,6 +93,7 @@ function userUpdateUser() {
     }
 }
 
+// User Order Code
 function userGetExistingOrder() {
     const token = document.cookie;
     // console.log(token);
@@ -124,26 +128,25 @@ function userGetExistingOrder() {
             if (user.order_status === 'pending') {
                 order_pending += 
                     `<tr>
-                            <th scope="row">${i}</th>
-                            <td>${user.order_status}
-                            <span hidden>${user.user_id}</span>
-                            <span hidden>${user.order_id}</span>
-                            </td>
-                            <td>${user.order_date}</td>
-                            <td>${user.jumlah_barang} Barang</td>
-                            <td>IDR ${user.total_harga}</td>
-                            <td>
-                                <button type="button" id="${user.order_id}" onclick="function(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
-                                data-bs-target="#modalUpdate">
-                                Detail
-                                <span id="item-id" hidden>${user.order_id}</span>
-                                </button>
-                                <button type="button" id="${user.order_id}" onclick="function(this.id)" class="btn btn-danger btn-sm me-1" data-bs-toggle="modal"
-                                data-bs-target="#modalUpdate">
-                                Cancel
-                                <span id="item-id" hidden>${user.order_id}</span>
-                                </button>
-                            </td>
+                        <th scope="row">${i}</th>
+                        <td>${user.order_status}
+                        <span hidden>${user.user_id}</span>
+                        <span hidden>${user.order_id}</span>
+                        </td>
+                        <td>${user.order_date}</td>
+                        <td>${user.jumlah_barang} Barang</td>
+                        <td>IDR ${user.total_harga}</td>
+                        <td>
+                            <button type="button" id="${user.order_id}" onclick="getOrderDetail(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
+                            data-bs-target="#modalUpdate">
+                            Detail
+                            <span id="item-id" hidden>${user.order_id}</span>
+                            </button>
+                            <button type="button" id="${user.order_id}" onclick="cancelOrder(this.id)" class="btn btn-danger btn-sm me-1">
+                            Cancel
+                            <span id="item-id" hidden>${user.order_id}</span>
+                            </button>
+                        </td>
                     </tr>`
                     i++
             } else if (user.order_status === 'activate') {
@@ -158,7 +161,7 @@ function userGetExistingOrder() {
                             <td>${user.jumlah_barang} Barang</td>
                             <td>IDR ${user.total_harga}</td>
                             <td>
-                                <button type="button" id="${user.order_id}" onclick="function(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
+                                <button type="button" id="${user.order_id}" onclick="getOrderDetail(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
                                 data-bs-target="#modalUpdate">
                                 Detail
                                 <span id="item-id" hidden>${user.order_id}</span>
@@ -215,7 +218,7 @@ function userGetOrderHistory() {
                             </td>
                             <td>${user.jumlah_barang} Barang</td>
                             <td>IDR ${user.total_harga}</td>
-                            <td><button type="button" id="${user.order_id}" onclick="function(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
+                            <td><button type="button" id="${user.order_id}" onclick="getOrderDetail(this.id)" class="btn btn-info btn-sm me-1" data-bs-toggle="modal"
                             data-bs-target="#modalUpdate">
                             Detail
                             <span id="item-id" hidden>${user.order_id}</span>
@@ -230,3 +233,51 @@ function userGetOrderHistory() {
 
     }
 }
+
+function userLogout() {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    location.href = "/index.html"
+}
+
+
+// function userCancelOrder(id) {
+//     const token = document.cookie;
+//     if (token !== "") {
+
+//         const split = token.split(".");
+//         let parsedToken = JSON.parse(atob(split[1]));
+//         console.log(parsedToken)
+//         let username = parsedToken["username"]
+//         let password = parsedToken["password"]
+//         let userId = parsedToken["id"]
+//         // console.log(username)
+
+//         let order_id = id
+//         console.log(order_id)
+    
+//         const myHeaders = new Headers();
+//         myHeaders.append("Authorization", "Basic " + btoa(username+":"+password));
+//         myHeaders.append("Content-Type", "application/json");
+
+        
+//         const raw = JSON.stringify({
+//         "order_id": order_id
+//         });
+
+//         var requestOptions = {
+//         method: 'DELETE',
+//         headers: myHeaders,
+//         body: raw,
+//         redirect: 'follow'
+//         };
+
+//         fetch("http://127.0.0.1:5000/order/cancel_order", requestOptions)
+//         .then(response => response.json())
+//         .then((result) => {
+//             console.log(result)
+//             alert("Order Berhasil di cancel")
+//             location.reload()
+//         })
+//         .catch(error => console.log('error', error));
+//     }
+// }

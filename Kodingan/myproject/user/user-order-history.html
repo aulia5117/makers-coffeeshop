@@ -37,7 +37,7 @@
   ======================================================== -->
 </head>
 
-<body onload="userGetOrderHistory();">
+<body onload="userCheckCookie();userGetOrderHistory();">
 
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
@@ -49,19 +49,35 @@
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
       </div><!-- End Logo -->
+
+      <nav class="header-nav mx-auto">
+        <div class="nav-item">
+          <a class="nav-link" href="/index.html">Home</a>
+        </div>
+      </nav>
+      <nav class="header-nav mx-auto">
+        <div class="nav-item">
+          <a class="nav-link" href="/menu.html">Menu</a>
+        </div>
+      </nav>
+      <nav class="header-nav mx-auto">
+        <div class="nav-item">
+          <a class="nav-link" href="/news.html">News</a>
+        </div>
+      </nav>
   
       <nav class="header-nav ms-auto">
   
-            <div class="dropdown me-3">
-              <a id="userprofile" class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+              <div class="dropdown me-3">
+                <a id="userprofile" class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                 
                 <span class="d-none d-md-block dropdown-toggle ps-2">Nama User</span>
-              </a>
-              <ul class="dropdown-menu">
+                </a>
+                <ul class="dropdown-menu">
                 <li><button class="dropdown-item" type="button" onclick="location.href='user-profile.html'">Profil</button></li>
-                <li><button class="dropdown-item" type="button">Order ku</button></li>
+                <li><button class="dropdown-item" type="button" onclick="location.href='user-active-order.html'">Order ku</button></li>
                 <hr>
-                <li><button class="dropdown-item" type="button" onclick="logout()">Logout</button></li>
+                <li><button class="dropdown-item" type="button" onclick="userLogout()">Logout</button></li>
               </ul>
             </div>
             <!-- End Profile -->
@@ -115,7 +131,7 @@
       <div class="row">
 
         <div class="card">
-          <div class="card-body">
+          <div class="card-body my-2">
             
             <!-- Active Table -->
             <table class="table table-borderless">
@@ -151,6 +167,55 @@
 
   </main><!-- End #main -->
 
+        <!-- Start Order Detail Modal -->
+        <section id="modal-section">
+          <div class="modal modal-xl fade" id="modalUpdate" tabindex="-1" aria-labelledby="modalUpdate" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modal-nama-item">Detail</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="card-body">
+                    <div class="card">
+                      <div class="card-body">
+                        <!-- <h5 class="card-title">Nomer Item Sekian</h5> -->
+                        
+                        <!-- Modal Table -->
+                        <table class="table table-borderless">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <!-- <th scope="col">Nama User</th> -->
+                              <th scope="col">Nama Item</th>
+                              <!-- <th scope="col">Waktu Order</th> -->
+                              <th scope="col">Jumlah Sub-Barang</th>
+                              <th scope="col">Sub-Total Harga</th>
+                              <!-- <th scope="col">Action</th> -->
+                            </tr>
+                          </thead>
+                          <tbody id="modal-order-detail">
+                            <tr>
+                              <th scope="row">Nomer</th>
+                              <td>Nama Item</td>
+                              <td>Jumlah Sub-Barang</td>
+                              <td>Sub-Total Harga</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- End Tables without borders -->
+            
+                      </div>
+                    </div>
+                  </div>
+    
+              </div>
+            </div>
+          </div>
+      </section>
+      <!-- End Order Detail Modal -->
+
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="copyright">
@@ -180,6 +245,7 @@
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
   <script src="../user/assets/js/user.js"></script>
+  <script src="../assets/js/custom.js"></script>
 
 </body>
 
