@@ -272,7 +272,7 @@ function adminGetAllOrder() {
                   Accept
                   <span id="item-id" hidden>${item.item_id}</span>
 
-                  <button type="button" id="${item.order_id}" onclick="cancelOrder(this.id)" class="btn btn-danger btn-sm me-1">
+                  <button type="button" id="${item.order_id}" onclick="adminCancelOrder(this.id)" class="btn btn-danger btn-sm me-1">
                   Cancel
                   <span id="item-id" hidden>${item.item_id}</span>
                 </td>
@@ -301,7 +301,7 @@ function adminGetAllOrder() {
                   Finish
                   <span id="item-id" hidden>${item.item_id}</span>
 
-                  <button type="button" id="${item.order_id}" onclick="cancelOrder(this.id)" class="btn btn-danger btn-sm me-1">
+                  <button type="button" id="${item.order_id}" onclick="adminCancelOrder(this.id)" class="btn btn-danger btn-sm me-1">
                   Cancel
                   <span id="item-id" hidden>${item.item_id}</span>
                 </td>
@@ -400,4 +400,19 @@ function adminFinishOrder(id) {
         
         })
         .catch(error => console.log('error', error));
+}
+
+function adminCancelOrder(id) {
+  const requestOptions = {
+    method: 'DELETE',
+    redirect: 'follow'
+  };
+  
+  fetch(`http://127.0.0.1:5000/order/admin_cancel_order/${id}`, requestOptions)
+    .then(response => response.json())
+    .then((result) => {
+      console.log(result)
+      alert("Order Berhasil di Cancel")
+    })
+    .catch(error => console.log('error', error));
 }

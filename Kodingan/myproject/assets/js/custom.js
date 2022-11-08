@@ -2,7 +2,7 @@
 
 function checkCookie() {
     const token = document.cookie;
-    console.log(token);
+    // console.log(token);
     if (token !== "") {
         document.getElementById('loginbutton').style.display = "none";
         const split = token.split(".");
@@ -26,7 +26,7 @@ function checkCookie() {
         fetch("http://127.0.0.1:5000/order/get_cart_order", requestOptions)
         .then(response => response.json())
         .then(result => {
-          console.log(result)
+        //   console.log(result)
           document.getElementById('cart-count').innerHTML = result.length
         })
         .catch(error => console.log('error', error));
@@ -101,7 +101,7 @@ function cancelOrder(id) {
 
         var requestOptions = {
         method: 'DELETE',
-        headers: myHeaders,
+        // headers: myHeaders,
         body: raw,
         redirect: 'follow'
         };

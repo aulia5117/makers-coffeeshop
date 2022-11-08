@@ -85,9 +85,9 @@ function register() {
     };
 
     fetch("http://127.0.0.1:5000/register", requestOptions)
-    .then(response => response.text())
+    .then(response => response.json())
     .then(result => {
-        console.log(result)
+        // console.log(result)
         alert("Register berhasil, silahkan login")
     })
     .catch(error => console.log('error fetching', error));

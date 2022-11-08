@@ -102,11 +102,20 @@
                     <button id="loginbutton" type="button" class="btn btn-outline-primary" onclick="movePage()">
                       Log in
                     </button>
-                  <a id="userprofile" class="nav-icon position-relative text-decoration-none" href="#">
-                              <i class="fa fa-fw fa-user text-dark mr-3 ml-3"></i>
-                              <!-- <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>  -->
-                              <span>hello</span> 
-                          </a>
+                  <!-- Start User Dropdown -->
+                  <div class="dropdown">
+                    <a id="userprofile" class="dropdown-toggle nav-icon position-relative text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-fw fa-user text-dark mr-3 ml-3"></i>
+                      <span>hello</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><button class="dropdown-item" type="button" onclick="location.href='user/user-profile.html'">Profil</button></li>
+                      <li><button class="dropdown-item" type="button" onclick="location.href='user/user-active-order.html'">Order ku</button></li>
+                      <hr>
+                      <li><button class="dropdown-item" type="button" onclick="logout()">Logout</button></li>
+                    </ul>
+                  </div>
+                  <!-- End User Dropdown -->
                 </div>
               </div>
             </div>
@@ -124,7 +133,9 @@
                             <h2 class="mb-3">Keranjang</h2>
                             <hr>
                             <!-- Keranjang Start -->
-                            <form id="get-keranjang">
+                            <div id="get-keranjang">
+                              
+                            </div>
                                 <!-- <ul>
                                     <div class="card">
                                         <div class="card-header">
@@ -144,7 +155,7 @@
                                       </div>
                                       
                                 </ul> -->
-                                <ul>
+                                <!-- <ul>
                                   <div class="card mb-3">
                                     <div class="row g-0">
                                       <div class="card-header">
@@ -169,7 +180,7 @@
                                     </div>
                                   </div>
                                 </ul>
-                            </form>                            
+                            </form>                             -->
                               <!-- Keranjang end -->
                         </div>
                     </div>

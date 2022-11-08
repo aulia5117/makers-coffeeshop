@@ -575,23 +575,31 @@ def add_cart_order():
     else :
         data = request.get_json()
         query_user = User.query.filter_by(user_id=auth[0]).first()
-
+        
         input_item = data["item_id"]
         input_jumlah = data["jumlah_barang"]
         kali_jumlah = int(input_jumlah)
         query_item = Item.query.filter_by(item_id=input_item).first()
-        total_harga = query_item.harga_item * kali_jumlah 
-        
-        cart_order = CartOrder(
-            user_id = auth[0],
-            item_id = input_item,
-            nama_item = query_item.nama_item,
-            jumlah_barang = input_jumlah,
-            total_harga = total_harga
-        )
+        query_cart = CartOrder.query.filter_by(user_id=auth[0]).filter_by(item_id=input_item).first()
 
-        try :
+        if query_cart != None :
+            total_harga = query_item.harga_item * kali_jumlah
+            query_cart.jumlah_barang += kali_jumlah
+            # query_cart.jumlah_
+        else :
+            total_harga = query_item.harga_item * kali_jumlah 
+            cart_order = CartOrder(
+                user_id = auth[0],
+                item_id = input_item,
+                nama_item = query_item.nama_item,
+                jumlah_barang = input_jumlah,
+                total_harga = total_harga
+            )
             db.session.add(cart_order)
+
+        
+        try :
+            
             db.session.commit()
         except :
             return {
@@ -647,6 +655,7 @@ def get_cart_order():
             },401
         return [
             {
+            'cart_order_id' : item.cart_order_id,
             'user_id' : item.user_id,
             'item_id' : item.item_id,
             'nama_item' : item.nama_item,
@@ -656,31 +665,19 @@ def get_cart_order():
             } for item in query_cart
             ],201
 
-@app.route('/order/delete_cart_order', methods=['DELETE'])
-def delete_cart_order():
-    auth = BasicAuth()
-    if not auth :
-        return jsonify("auth error")
-    else :
-        data = request.get_json()
-        query_user = User.query.filter_by(user_id=auth[0]).first()
-
-        input_item = data["item_id"]
-        input_jumlah = data["jumlah_barang"]
-        kali_jumlah = int(input_jumlah)
-        query_item = Item.query.filter_by(item_id=input_item).first()
-        total_harga = query_item.harga_item * kali_jumlah 
+@app.route('/order/delete_cart_item/<id>', methods=['DELETE'])
+def delete_cart_item(id):
+    # auth = BasicAuth()
+    # if not auth :
+    #     return jsonify("auth error")
+    # else :
+        # data = request.get_json()
         
-        cart_order = CartOrder(
-            user_id = auth[0],
-            item_id = input_item,
-            nama_item = query_item.nama_item,
-            jumlah_barang = input_jumlah,
-            total_harga = total_harga
-        )
-
+        # query_user = User.query.filter_by(user_id=auth[0]).first()
+        # CartOrder.query.filter_by(cart_order_id=data['cart_order_id']).delete()
+        # query_cart = CartOrder.query.filter_by(cart_order_id=id).first()
+        db.engine.execute(f'''DELETE FROM cart_order WHERE cart_order_id = {id}''')
         try :
-            db.session.add(cart_order)
             db.session.commit()
         except :
             return {
@@ -689,9 +686,7 @@ def delete_cart_order():
         return {
             "response" : "success"
         },200
-        return {
-            "val" : total_harga
-        }
+
         
 @app.route('/order/check_order_pending/<id>', methods=['PUT'])
 def check_order_pending(id):
@@ -777,6 +772,26 @@ def cancel_order():
     else :
         # Order.query.filter(Order.order_status == "pending").filter_by(user_id=auth[0]).filter_by(order_id=data["order_id"]).delete()
         Order.query.filter_by(order_id=data["order_id"]).delete()
+    try :
+        # order = Order.query.filter(Order.order_status == "pending").filter_by(user_id=id).delete()
+        db.session.commit()
+    except :
+        return {
+            "response" : "error"
+            },401
+    return {
+        "response" : "success"
+        },201
+
+@app.route('/order/admin_cancel_order/<id>', methods=['DELETE'])
+def admin_cancel_order(id):
+    # data = request.get_json()
+    # auth = BasicAuth()
+    # if not auth :
+    #     return jsonify ("auth error")
+    # else :
+        # Order.query.filter(Order.order_status == "pending").filter_by(user_id=auth[0]).filter_by(order_id=data["order_id"]).delete()
+    Order.query.filter_by(order_id=id).delete()
     try :
         # order = Order.query.filter(Order.order_status == "pending").filter_by(user_id=id).delete()
         db.session.commit()

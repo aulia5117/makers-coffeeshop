@@ -25,7 +25,7 @@ function getKeranjang() {
         fetch("http://127.0.0.1:5000/order/get_cart_order", requestOptions)
           .then(response => response.json())
           .then((result) => {
-          console.log(result)
+          // console.log(result)
           document.getElementById('total-cart').innerHTML = "IDR " + result[0].cart_total
 
           let text = "";
@@ -34,16 +34,16 @@ function getKeranjang() {
           document.getElementById("get-keranjang").innerHTML = text;
            
           function myFunction(item) {
-            console.log(item)
+            // console.log(item)
             text += 
-                      `<ul>
+                    `<ul>
                       <div id="item${i}" class="card mb-3">
                         <div class="row g-0">
                           <div class="card-header">
                             <h5>Item ${i}</h5>
                           </div>
                           <div class="col-md-4">
-                            <img src="assets/img/coffee-child-sample.jpg" class="img-fluid" height="50%" alt="...">
+                            <img src="assets/img/coffee-child-sample.jpg" class="img-fluid" alt="...">
                           </div>
                           
                         <div class="col-md-8">
@@ -55,7 +55,7 @@ function getKeranjang() {
                                
                             </div>
                             <div class="text-end">
-                              <button id="${item.item_id}" class="btn btn-danger">Delete</button>
+                              <button type="button" id="${item.cart_order_id}" class="btn btn-danger" onclick="deleteCartItem(this.id)">Delete</button>
                             </div>
                               
                             </div>
@@ -100,4 +100,21 @@ function addOrder() {
       })
       .catch(error => console.log('error', error));
     }
+}
+
+function deleteCartItem(id) {
+
+  const requestOptions = {
+    method: 'DELETE',
+    redirect: 'follow'
+  };
+  
+  fetch("http://127.0.0.1:5000/order/delete_cart_item/"+id, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      console.log(result)
+      alert("Item berhasil di delete")
+      location.reload()
+    })
+    .catch(error => console.log('error', error));
 }
