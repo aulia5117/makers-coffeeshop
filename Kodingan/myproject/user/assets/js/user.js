@@ -49,7 +49,7 @@ function userGetUserData() {
                 user = result[0]
                 document.getElementById('input-nama-user').value = user.nama_user
                 document.getElementById('input-email-user').value = user.email_user
-                document.getElementById('input-username').value = user.username
+                document.getElementById('input-username').innerHTML = user.username
             })
             .catch(error => console.log('error', error));
     }
@@ -75,12 +75,12 @@ function userUpdateUser() {
 
         let nama_user = document.getElementById('input-nama-user').value
         let email_user = document.getElementById('input-email-user').value
-        let username_user = document.getElementById('input-username').value
+        // let username_user = document.getElementById('input-username').value
 
         const raw = JSON.stringify({
         "nama_user": nama_user,
         "email_user": email_user,
-        "username" : username_user
+        // "username" : username_user
         });
 
         const requestOptions = {
@@ -95,7 +95,7 @@ function userUpdateUser() {
         .then(response => response.json())
         .then((result) => {
             alert("Update Sukses")
-            userLogout()
+            location.reload()
             // console.log(result)
         })
         .catch(error => console.log('error', error));

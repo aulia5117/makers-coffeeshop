@@ -199,7 +199,11 @@ function adminUpdateMenu() {
   
   fetch(`http://127.0.0.1:5000/item/update_item/${id}`, requestOptions)
     .then(response => response.json())
-    .then(result => console.log(result))
+    .then(result => {
+      console.log(result)
+      alert("Item berhasil diupdate")
+      location.reload()
+    })
     .catch(error => console.log('error', error));
 }
 
