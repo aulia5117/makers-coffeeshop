@@ -50,6 +50,7 @@ function signIn() {
                 setCookie('token', data.token, 1)
                 location.href = 'index.html'
             } else if(data.message === "success" && data.isAdmin === true) {
+                setCookie('token_admin', data.token, 1)
                 location.href = '../admin/admin.html'
             } else {
                 alert("error fetching return")

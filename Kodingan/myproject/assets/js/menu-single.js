@@ -38,7 +38,7 @@ function addToCart() {
 
     document.getElementById('wadah-value').innerHTML = document.getElementById('item-quantity').value
     let value = document.getElementById('wadah-value').innerHTML
-    console.log(value)
+    // console.log(value)
 
     let myHeaders = new Headers();
     myHeaders.append("Authorization", "Basic " + btoa(username+":"+password));
@@ -46,8 +46,8 @@ function addToCart() {
 
     let itemIdValue = document.getElementById('single-item-id').innerHTML
     let jumlahBarang = document.getElementById('wadah-value').innerHTML
-    console.log(typeof itemIdValue)
-    console.log(typeof jumlahBarang)
+    // console.log(typeof itemIdValue)
+    // console.log(typeof jumlahBarang)
 
     let raw = JSON.stringify({
       "item_id" : itemIdValue,
@@ -66,10 +66,12 @@ function addToCart() {
       .then((result) => {
         console.log(result)
         alert("Pesanan Masuk Keranjang")
+        location.reload()
       })
       .catch(error => console.log('error', error));
   } else {
     alert("Silahkan Login")
+    location.href = 'login.html'
   } 
 }
 
@@ -87,7 +89,7 @@ function buyToCart() {
 
     document.getElementById('wadah-value').innerHTML = document.getElementById('item-quantity').value
     let value = document.getElementById('wadah-value').innerHTML
-    console.log(value)
+    // console.log(value)
 
     let myHeaders = new Headers();
     myHeaders.append("Authorization", "Basic " + btoa(username+":"+password));
@@ -95,8 +97,8 @@ function buyToCart() {
 
     let itemIdValue = document.getElementById('single-item-id').innerHTML
     let jumlahBarang = document.getElementById('wadah-value').innerHTML
-    console.log(typeof itemIdValue)
-    console.log(typeof jumlahBarang)
+    // console.log(typeof itemIdValue)
+    // console.log(typeof jumlahBarang)
 
     let raw = JSON.stringify({
       "item_id" : itemIdValue,
@@ -115,10 +117,11 @@ function buyToCart() {
       .then((result) => {
         console.log(result)
         alert("Pesanan Masuk Keranjang")
-        location.href = 'keranjang.html'
+        location.reload()
       })
       .catch(error => console.log('error', error));
   } else {
     alert("Silahkan Login")
+    location.href = 'login.html'
   } 
 }

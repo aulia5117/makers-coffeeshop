@@ -1,9 +1,16 @@
+function adminCheckCookie() {
+  const token = document.cookie;
+  if (token === "") {
+      location.href = '../login.html'
+  }
+}
+
 function adminLogout() {
-  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "token_admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   location.href = "../login.html"
 }
 
-// Admin.html
+// Halaman Admin Dashboard (admin.html)
 function getTop5User() {
     
     const requestOptions = {
@@ -64,6 +71,7 @@ function getTop5Item() {
         .catch(error => console.log('error', error));
 }
 
+// Halaman Admin Menu (admin-all-menu.html)
 function adminGetKategori() {
     const requestOptions = {
     method: 'GET',
@@ -88,44 +96,6 @@ function adminGetKategori() {
     .catch(error => console.log('error', error));
 }
 
-function postMenu() {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    let nama_item = document.getElementById('input-nama-item').value
-    let deskripsi = document.getElementById('input-deskripsi').value
-    let harga_item = document.getElementById('input-harga-item').value
-    let jumlah_item = document.getElementById('input-jumlah-item').value
-    let kategori_id = document.getElementById('input-kategori').value
-    console.log(nama_item)
-    console.log(deskripsi)
-    // console.log(harga_item)
-    // console.log(jumlah_item)
-    // console.log(kategori_id)
-
-    let raw = JSON.stringify({
-      "nama_item": nama_item,
-      "deskripsi": deskripsi,
-      "harga_item": harga_item,
-      "jumlah_item": jumlah_item,
-      "kategori_id": kategori_id
-    });
-
-    const requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      // redirect: 'follow'
-    };
-
-    fetch("http://127.0.0.1:5000/item/add_item", requestOptions)
-      .then(response => response.json())
-      .then((result) => {
-        console.log(result)
-        alert("Menu baru telah dimasukkan")
-      })
-      .catch(error => console.log('error', error));
-}
 
 function adminGetAllItem() {
 
@@ -151,10 +121,14 @@ function adminGetAllItem() {
                 <td>${item.nama_item}</td>
                 <td>IDR ${item.harga_item}</td>
                 <td>${item.kategori}</td>
+                <td>${item.jumlah_item} Stok</td>
                 <td>${item.jumlah_terbeli} Barang</td>
                 <td><button type="button" id="${item.item_id}" onclick="adminGetItemModal(this.id)" class="btn btn-warning btn-sm me-1" data-bs-toggle="modal"
                 data-bs-target="#modalUpdate">
                 Update
+                <span id="item-id" hidden>${item.item_id}</span>
+                <td><button type="button" id="${item.item_id}" onclick="adminDeleteMenu(this.id)" class="btn btn-danger btn-sm me-1">
+                Delete
                 <span id="item-id" hidden>${item.item_id}</span>
               </button></td>
             </tr>` 
@@ -227,6 +201,118 @@ function adminUpdateMenu() {
     .then(response => response.json())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));
+}
+
+function adminDeleteMenu(id) {
+      const requestOptions = {
+      method: 'DELETE',
+      redirect: 'follow'
+    };
+
+    fetch(`http://127.0.0.1:5000/item/delete_item/${id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result)
+        alert("Item berhasil di delete")
+        location.reload()
+      })
+      .catch(error => console.log('error', error));
+}
+
+// Halaman Admin Create Menu (admin-create-menu.html)
+function postMenu() {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  let nama_item = document.getElementById('input-nama-item').value
+  let deskripsi = document.getElementById('input-deskripsi').value
+  let harga_item = document.getElementById('input-harga-item').value
+  let jumlah_item = document.getElementById('input-jumlah-item').value
+  let kategori_id = document.getElementById('input-kategori').value
+  console.log(nama_item)
+  console.log(deskripsi)
+  // console.log(harga_item)
+  // console.log(jumlah_item)
+  // console.log(kategori_id)
+
+  let raw = JSON.stringify({
+    "nama_item": nama_item,
+    "deskripsi": deskripsi,
+    "harga_item": harga_item,
+    "jumlah_item": jumlah_item,
+    "kategori_id": kategori_id
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    // redirect: 'follow'
+  };
+
+  fetch("http://127.0.0.1:5000/item/add_item", requestOptions)
+    .then(response => response.json())
+    .then((result) => {
+      console.log(result)
+      alert("Menu baru telah dimasukkan")
+    })
+    .catch(error => console.log('error', error));
+}
+
+// Halaman Admin Order (admin-order.html)
+function adminAcceptPending(id) {
+    
+  const requestOptions = {
+    method: 'PUT',
+    // headers: myHeaders,
+    redirect: 'follow'
+  };
+  
+  fetch(`http://127.0.0.1:5000/order/check_order_pending/${id}`, requestOptions)
+    .then(response => response.json())
+    .then((result) => 
+    {
+      console.log(result)
+      alert(`Order Diterima`)
+      location.reload()
+    
+    })
+    .catch(error => console.log('error', error));
+}
+
+function adminFinishOrder(id) {
+    
+    const requestOptions = {
+      method: 'PUT',
+      // headers: myHeaders,
+      redirect: 'follow'
+    };
+    
+    fetch(`http://127.0.0.1:5000/order/check_order_activate/${id}`, requestOptions)
+      .then(response => response.json())
+      .then((result) => 
+      {
+        console.log(result)
+        alert(`Order Diselesaikan`)
+        location.reload()
+      
+      })
+      .catch(error => console.log('error', error));
+}
+
+function adminCancelOrder(id) {
+const requestOptions = {
+  method: 'DELETE',
+  redirect: 'follow'
+};
+
+fetch(`http://127.0.0.1:5000/order/admin_cancel_order/${id}`, requestOptions)
+  .then(response => response.json())
+  .then((result) => {
+    console.log(result)
+    alert("Order Berhasil di Cancel")
+  })
+  .catch(error => console.log('error', error));
 }
 
 function adminGetAllOrder() {
@@ -315,6 +401,10 @@ function adminGetAllOrder() {
     .catch(error => console.log('error', error));
 }
 
+
+
+
+// Halaman Admin History (admin-history.html)
 function adminGetAllCompletedOrder() {
   const requestOptions = {
     method: 'GET',
@@ -362,57 +452,4 @@ function adminGetAllCompletedOrder() {
     .catch(error => console.log('error', error));
 }
 
-function adminAcceptPending(id) {
-    
-    const requestOptions = {
-      method: 'PUT',
-      // headers: myHeaders,
-      redirect: 'follow'
-    };
-    
-    fetch(`http://127.0.0.1:5000/order/check_order_pending/${id}`, requestOptions)
-      .then(response => response.json())
-      .then((result) => 
-      {
-        console.log(result)
-        alert(`Order Diterima`)
-        location.reload()
-      
-      })
-      .catch(error => console.log('error', error));
-}
 
-function adminFinishOrder(id) {
-      
-      const requestOptions = {
-        method: 'PUT',
-        // headers: myHeaders,
-        redirect: 'follow'
-      };
-      
-      fetch(`http://127.0.0.1:5000/order/check_order_activate/${id}`, requestOptions)
-        .then(response => response.json())
-        .then((result) => 
-        {
-          console.log(result)
-          alert(`Order Diselesaikan`)
-          location.reload()
-        
-        })
-        .catch(error => console.log('error', error));
-}
-
-function adminCancelOrder(id) {
-  const requestOptions = {
-    method: 'DELETE',
-    redirect: 'follow'
-  };
-  
-  fetch(`http://127.0.0.1:5000/order/admin_cancel_order/${id}`, requestOptions)
-    .then(response => response.json())
-    .then((result) => {
-      console.log(result)
-      alert("Order Berhasil di Cancel")
-    })
-    .catch(error => console.log('error', error));
-}

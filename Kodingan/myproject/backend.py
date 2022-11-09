@@ -425,6 +425,25 @@ def item_update(id):
             "response" : "success"
         },200
 
+@app.route('/item/delete_item/<id>', methods=['DELETE'])
+def delete_item(id):
+    # auth = BasicAuth()
+    # if not auth :
+    #     return jsonify("auth error")
+    # else :
+        # data = request.get_json()
+        
+        db.engine.execute(f'''DELETE FROM "item" WHERE item_id = {id}''')
+        try :
+            db.session.commit()
+        except :
+            return {
+                "response" : "error"
+            },401
+        return {
+            "response" : "success"
+        },200
+
 
 ### Order API
 

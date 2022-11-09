@@ -16,9 +16,16 @@ function userCheckCookie() {
 
     } else {
         document.getElementById('userprofile').style.display = "none";
+        location.href = '../login.html'
     }
 }
 
+function userLogout() {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    location.href = "/index.html"
+}
+
+// Halaman User Profile (user-profile.html)
 function userGetUserData() {
     const token = document.cookie;
     // console.log(token);
@@ -47,6 +54,7 @@ function userGetUserData() {
             .catch(error => console.log('error', error));
     }
 }
+
 
 function userUpdateUser() {
 
@@ -87,13 +95,14 @@ function userUpdateUser() {
         .then(response => response.json())
         .then((result) => {
             alert("Update Sukses")
-            console.log(result)
+            userLogout()
+            // console.log(result)
         })
         .catch(error => console.log('error', error));
     }
 }
 
-// User Order Code
+// Halaman User Active Order (user-active-order.html)
 function userGetExistingOrder() {
     const token = document.cookie;
     // console.log(token);
@@ -142,7 +151,7 @@ function userGetExistingOrder() {
                             Detail
                             <span id="item-id" hidden>${user.order_id}</span>
                             </button>
-                            <button type="button" id="${user.order_id}" onclick="cancelOrder(this.id)" class="btn btn-danger btn-sm me-1">
+                            <button type="button" id="${user.order_id}" onclick="userCancelOrder(this.id)" class="btn btn-danger btn-sm me-1">
                             Cancel
                             <span id="item-id" hidden>${user.order_id}</span>
                             </button>
@@ -176,6 +185,45 @@ function userGetExistingOrder() {
         })
         .catch(error => console.log('error', error));
 
+    }
+}
+
+function userCancelOrder(id) {
+    
+    const token = document.cookie;
+    if (token !== "") {
+
+        const split = token.split(".");
+        let parsedToken = JSON.parse(atob(split[1]));
+        console.log(parsedToken)
+        let username = parsedToken["username"]
+        let password = parsedToken["password"]
+        let userId = parsedToken["id"]
+        // console.log(username)
+
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(username+":"+password));
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+        "order_id": id
+        });
+        
+        var requestOptions = {
+        method: 'DELETE',
+        headers: myHeaders,
+        body: raw,
+        //   redirect: 'follow'
+        };
+        
+        fetch("http://127.0.0.1:5000/order/cancel_order", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            alert("Order kamu berhasil di cancel")
+            location.reload()
+        })
+        .catch(error => console.log('error', error));
     }
 }
 
@@ -234,10 +282,7 @@ function userGetOrderHistory() {
     }
 }
 
-function userLogout() {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    location.href = "/index.html"
-}
+
 
 
 // function userCancelOrder(id) {

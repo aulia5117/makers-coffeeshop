@@ -75,47 +75,47 @@ function logout() {
     location.reload()
 }
 
-function cancelOrder(id) {
-    const token = document.cookie;
-    if (token !== "") {
+// function cancelOrder(id) {
+//     const token = document.cookie;
+//     if (token !== "") {
 
-        const split = token.split(".");
-        let parsedToken = JSON.parse(atob(split[1]));
-        console.log(parsedToken)
-        let username = parsedToken["username"]
-        let password = parsedToken["password"]
-        let userId = parsedToken["id"]
-        // console.log(username)
+//         const split = token.split(".");
+//         let parsedToken = JSON.parse(atob(split[1]));
+//         console.log(parsedToken)
+//         let username = parsedToken["username"]
+//         let password = parsedToken["password"]
+//         let userId = parsedToken["id"]
+//         // console.log(username)
 
-        let order_id = id
-        console.log(order_id)
+//         let order_id = id
+//         console.log(order_id)
     
-        const myHeaders = new Headers();
-        myHeaders.append("Authorization", "Basic " + btoa(username+":"+password));
-        myHeaders.append("Content-Type", "application/json");
+//         const myHeaders = new Headers();
+//         myHeaders.append("Authorization", "Basic " + btoa(username+":"+password));
+//         myHeaders.append("Content-Type", "application/json");
 
         
-        const raw = JSON.stringify({
-        "order_id": order_id
-        });
+//         const raw = JSON.stringify({
+//         "order_id": order_id
+//         });
 
-        var requestOptions = {
-        method: 'DELETE',
-        // headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-        };
+//         var requestOptions = {
+//         method: 'DELETE',
+//         // headers: myHeaders,
+//         body: raw,
+//         redirect: 'follow'
+//         };
 
-        fetch("http://127.0.0.1:5000/order/cancel_order", requestOptions)
-        .then(response => response.json())
-        .then((result) => {
-            console.log(result)
-            alert("Order Berhasil di cancel")
-            location.reload()
-        })
-        .catch(error => console.log('error', error));
-    }
-}
+//         fetch("http://127.0.0.1:5000/order/cancel_order", requestOptions)
+//         .then(response => response.json())
+//         .then((result) => {
+//             console.log(result)
+//             alert("Order Berhasil di cancel")
+//             location.reload()
+//         })
+//         .catch(error => console.log('error', error));
+//     }
+// }
 
 function getOrderDetail(id) {
         // alert(id)
